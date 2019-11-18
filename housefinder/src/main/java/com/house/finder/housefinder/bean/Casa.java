@@ -1,17 +1,55 @@
 package com.house.finder.housefinder.bean;
 
-public class Casa {
+import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "casa")
+public class Casa implements Serializable{
+
+	private static final long serialVersionUID = 7769189875610703602L;
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	
+	@Column(name = "id_annuncio", nullable = false)
 	private String idAnnuncio;
+	
+	@Column(name = "titolo", nullable = false)
 	private String titolo;
+	
+	@Column(name = "link", nullable = false)
 	private String link;
+	
+	@Column(name = "descrizione", nullable = false)
 	private String descrizione;
+	
+	@Column(name = "prezzo", nullable = false)
 	private String prezzo;
+	
+	@Column(name = "num_locali", nullable = false)
 	private String numLocali;
+	
+	@Column(name = "metri_quadri", nullable = false)
 	private String metriQuadri;
+	
+	@Column(name = "num_bagni")
 	private String numBagni;
+	
+	@Column(name = "piano")
 	private String piano;
+	
+	@Column(name = "garantito", nullable = false)
 	private boolean garantito;
+	
+	@Column(name = "agenzia")
 	private String agenzia;
 	
 	public String getIdAnnuncio() {

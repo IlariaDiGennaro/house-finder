@@ -17,6 +17,7 @@ import org.jsoup.select.Elements;
 
 import com.house.finder.housefinder.bean.Casa;
 import com.house.finder.housefinder.bean.util.CasaComparator;
+import com.house.finder.housefinder.dao.CasaDao;
 
 public class HouseFinder {
 
@@ -111,7 +112,8 @@ public class HouseFinder {
 							casa.setNumLocali(homeDatatoDefine);
 							continue;
 						}else if(homeDatatoDefine.contains("m2")) {
-							casa.setMetriQuadri(homeDatatoDefine);
+							String m2Beautify = homeDatatoDefine.replaceAll("superficie", "").trim();
+							casa.setMetriQuadri(m2Beautify);
 							continue;
 						}else if(homeDatatoDefine.contains("bagn")) {
 							casa.setNumBagni(homeDatatoDefine);
@@ -144,6 +146,12 @@ public class HouseFinder {
 		System.out.println("annunci normalizzati trovati: "+annunciList.size());
 
 		createCsvFile();
+		
+		
+		System.out.println("DB TEST");
+		CasaDao casaDao = new CasaDao();
+		casaDao.insertAll(annunciList);
+		
 		System.out.println("finito");
 	}
 
