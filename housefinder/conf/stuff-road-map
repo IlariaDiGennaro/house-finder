@@ -1,0 +1,25 @@
+HOUSE FINDER
+
+OK - API ricerca annunci case (immobiliare.it)
+	-- retrieve dati dal sito & manipolazione dei dati
+	-- rimozione duplicati + salvataggio
+	-- creazione file csv
+	
+OK - introduzione DB
+
+OK - definizione db bean e rework
+
+OK - MIGRAZIONE SPRING-BOOT
+
+- FUNZIONE annunci scartati
+
+- FUNZIONE concetto di duplicato (il primo trovato potrebbe non essere il più fresco)
+
+- FUNZIONE concetto di nuovo annuncio
+	-- definizione db bean e rework
+	
+- init file di configurazione ??
+
+- log file
+
+- update DB annunci

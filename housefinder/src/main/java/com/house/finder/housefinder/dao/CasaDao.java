@@ -22,4 +22,17 @@ public class CasaDao {
 		sessionObj.getTransaction().commit();
 		sessionObj.close();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Casa> getAll() {
+		System.out.println("GET ALL");
+
+		Session sessionObj = HibernateUtils.buildSessionFactory().openSession();
+		sessionObj.beginTransaction();
+		
+		List<Casa> resultList = sessionObj.createSQLQuery("SELECT * FROM casa").addEntity(Casa.class).list();
+
+		sessionObj.close();
+		return resultList;
+	}
 }

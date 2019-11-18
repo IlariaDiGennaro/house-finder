@@ -14,18 +14,27 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.house.finder.housefinder.bean.Casa;
 import com.house.finder.housefinder.bean.util.CasaComparator;
 import com.house.finder.housefinder.dao.CasaDao;
 
+@SpringBootApplication
 public class HouseFinder {
 
 	public static List<Casa> annunciList = new ArrayList<>();
 	public static List<Casa> nuoveCostruzioniList = new ArrayList<>();
 	public static HashMap<Casa, List<Casa>> duplicatiMap = new HashMap<Casa, List<Casa>>();
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
+		SpringApplication.run(HouseFinder.class, args);
+    }
+	
+	
+	
+	public static void main_2(String[] args) throws IOException {
 
 		// COMPLETE URL
 		//https://www.immobiliare.it/vendita-case/roma/?criterio=rilevanza&prezzoMassimo=400000&tipoProprieta=1&idMZona[]=10151&idMZona[]=10152&noAste=1&localiMinimo=3&tipoProprieta=1&fasciaPiano[]=20&pag=
