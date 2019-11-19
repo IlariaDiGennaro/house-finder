@@ -12,9 +12,32 @@ CREATE TABLE IF NOT EXISTS `casa` (
 	`num_locali` VARCHAR(10) NOT NULL,
 	`metri_quadri` VARCHAR(10) NOT NULL,
 	`num_bagni` VARCHAR(10) NULL,
-	`piano` VARCHAR(10) NULL,
+	`piano` VARCHAR(10) NULL DEFAULT NULL,
 	`garantito` TINYINT NOT NULL DEFAULT 0,
-	`agenzia` VARCHAR(255) NULL,
+	`agenzia` VARCHAR(255) NULL DEFAULT NULL,
+	`last_analyze` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf8mb4_unicode_ci'
+;
+
+CREATE TABLE `z_casa` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`cancellato` TINYINT(4) NOT NULL DEFAULT '0',
+	`scartato` TINYINT(4) NOT NULL DEFAULT '0',
+	`motivazione` VARCHAR(255) NULL DEFAULT NULL,
+	`id_annuncio` VARCHAR(50) NOT NULL,
+	`titolo` VARCHAR(255) NOT NULL,
+	`link` VARCHAR(255) NOT NULL,
+	`descrizione` VARCHAR(1024) NOT NULL,
+	`prezzo` VARCHAR(255) NOT NULL,
+	`num_locali` VARCHAR(10) NOT NULL,
+	`metri_quadri` VARCHAR(10) NOT NULL,
+	`num_bagni` VARCHAR(10) NULL DEFAULT NULL,
+	`piano` VARCHAR(10) NULL DEFAULT NULL,
+	`garantito` TINYINT(4) NOT NULL DEFAULT '0',
+	`agenzia` VARCHAR(255) NULL DEFAULT NULL,
+	`last_analyze` DATETIME NULL DEFAULT NULL,
 	PRIMARY KEY (`id`)
 )
 COLLATE='utf8mb4_unicode_ci'

@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,8 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.house.finder.housefinder.bean.Casa;
+import com.house.finder.housefinder.bean.ZCasa;
 import com.house.finder.housefinder.bean.util.CasaComparator;
 import com.house.finder.housefinder.dao.CasaRepository;
+import com.house.finder.housefinder.dao.ZCasaRepository;
 import com.house.finder.housefinder.site.bean.ImmobiliareIt;
 
 @Service
@@ -28,6 +32,8 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	
 	@Autowired
 	public CasaRepository casaRepository;
+	@Autowired
+	public ZCasaRepository zCasaRepository;
 	
 	public static List<Casa> annunciList = new ArrayList<>();
 	public static List<Casa> nuoveCostruzioniList = new ArrayList<>();
@@ -42,6 +48,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 		firstCleaningAnnunnci();
 		System.out.println("annunci normalizzati trovati: "+annunciList.size());
 		
+		Date lastAnalyze = new Date();
 		
 		Iterator<Casa> casaIter = annunciList.iterator();
  		while (casaIter.hasNext()) {
@@ -58,9 +65,39 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  				casaFound.setNumBagni(casaFromWeb.getNumBagni());
  				casaFound.setPiano(casaFromWeb.getPiano());
  				casaFound.setAgenzia(casaFromWeb.getAgenzia());
+ 				casaFound.setLastAnalyze(lastAnalyze);
  				casaRepository.save(casaFound);
  			}else {
+ 				casaFromWeb.setLastAnalyze(lastAnalyze);
  				casaRepository.save(casaFromWeb);
+ 			}
+		}
+ 		
+ 		List<Casa> casaListToDelete = casaRepository.findByLastAnalyze(lastAnalyze);
+ 		for (Casa casa : casaListToDelete) {
+			
+ 			if(analyzeDetailsPage(casa.getIdAnnuncio())) {
+ 				
+ 				ZCasa casaToDelete = new ZCasa();
+ 				casaToDelete.setCancellato(true);
+ 				casaToDelete.setIdAnnuncio(casa.getIdAnnuncio());
+ 				casaToDelete.setTitolo(casa.getTitolo());
+ 				casaToDelete.setLink(casa.getLink());
+ 				casaToDelete.setDescrizione(casa.getDescrizione());
+ 				casaToDelete.setPrezzo(casa.getPrezzo());
+ 				casaToDelete.setNumLocali(casa.getNumLocali());
+ 				casaToDelete.setMetriQuadri(casa.getMetriQuadri());
+ 				casaToDelete.setNumBagni(casa.getNumBagni());
+ 				casaToDelete.setPiano(casa.getPiano());
+ 				casaToDelete.setGarantito(casa.isGarantito());
+ 				casaToDelete.setAgenzia(casa.getAgenzia());
+ 				casaToDelete.setLastAnalyze(casa.getLastAnalyze());
+ 				
+ 				zCasaRepository.saveAndFlush(casaToDelete);
+ 				casaRepository.delete(casa);
+ 			} else {
+ 				casa.setLastAnalyze(lastAnalyze);
+ 				casaRepository.save(casa);
  			}
 		}
 		
@@ -68,6 +105,16 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 		createCsvFile(casaList);
 	}
 	
+	private boolean analyzeDetailsPage(String idAnnuncio) throws IOException{
+		
+		try {
+			Jsoup.connect(ImmobiliareIt.getDetailsImmobilareItUrl(idAnnuncio)).get();
+			return false;
+		} catch (HttpStatusException e) {
+			// da eliminare
+			return true;
+		}
+	}
 	
 	private void analyzePage() throws IOException {
 		Integer maxPage = 999;

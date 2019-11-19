@@ -26,5 +26,12 @@ public class ImmobiliareIt {
 				.concat(fasciaPiano)
 				.concat(genericPageParam);
 	}
+	
+	private static String basicDetailsImmobiliareItUrl = "https://www.immobiliare.it/annunci/";
+	
+	public static String getDetailsImmobilareItUrl(String idAnnuncio){
+		return basicDetailsImmobiliareItUrl
+				.concat(idAnnuncio);
+	}
 			
 }

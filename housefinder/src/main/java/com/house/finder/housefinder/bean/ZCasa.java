@@ -11,14 +11,23 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "casa")
-public class Casa implements Serializable{
+@Table(name = "z_casa")
+public class ZCasa implements Serializable{
 
 	private static final long serialVersionUID = 7769189875610703602L;
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Column(name = "cancellato", nullable = false)
+	private boolean cancellato;
+	
+	@Column(name = "scartato", nullable = false)
+	private boolean scartato;
+	
+	@Column(name = "motivazione")
+	private String motivazione;
 	
 	@Column(name = "id_annuncio", nullable = false)
 	private String idAnnuncio;
@@ -56,6 +65,25 @@ public class Casa implements Serializable{
 	@Column(name = "lastAnalyze")
 	private Date lastAnalyze;
 	
+	
+	public boolean isCancellato() {
+		return cancellato;
+	}
+	public void setCancellato(boolean cancellato) {
+		this.cancellato = cancellato;
+	}
+	public boolean isScartato() {
+		return scartato;
+	}
+	public void setScartato(boolean scartato) {
+		this.scartato = scartato;
+	}
+	public String getMotivazione() {
+		return motivazione;
+	}
+	public void setMotivazione(String motivazione) {
+		this.motivazione = motivazione;
+	}
 	public String getIdAnnuncio() {
 		return idAnnuncio;
 	}
@@ -132,7 +160,13 @@ public class Casa implements Serializable{
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Casa [idAnnuncio=");
+		builder.append("ZCasa [cancellato=");
+		builder.append(cancellato);
+		builder.append(", scartato=");
+		builder.append(scartato);
+		builder.append(", motivazione=");
+		builder.append(motivazione);
+		builder.append(", idAnnuncio=");
 		builder.append(idAnnuncio);
 		builder.append(", titolo=");
 		builder.append(titolo);
