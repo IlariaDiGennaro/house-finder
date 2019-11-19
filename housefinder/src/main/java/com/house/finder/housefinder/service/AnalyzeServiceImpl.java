@@ -5,12 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
@@ -22,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import com.house.finder.housefinder.bean.Casa;
 import com.house.finder.housefinder.bean.ZCasa;
-import com.house.finder.housefinder.bean.util.CasaComparator;
 import com.house.finder.housefinder.dao.CasaRepository;
 import com.house.finder.housefinder.dao.ZCasaRepository;
 import com.house.finder.housefinder.site.bean.ImmobiliareIt;
@@ -37,7 +32,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	
 	public static List<Casa> annunciList = new ArrayList<>();
 	public static List<Casa> nuoveCostruzioniList = new ArrayList<>();
-	public static HashMap<Casa, List<Casa>> duplicatiMap = new HashMap<Casa, List<Casa>>();
+//	public static HashMap<Casa, List<Casa>> duplicatiMap = new HashMap<Casa, List<Casa>>();
 	
 	@Override
 	public void analyze() throws IOException {
@@ -55,38 +50,41 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  			
  			Casa casaFromWeb = casaIter.next();
  			
- 			Casa casaFound = casaRepository.findByIdAnnuncio(casaFromWeb.getIdAnnuncio());
- 			if(casaFound != null) {
- 				casaFound.setTitolo(casaFromWeb.getTitolo());
- 				casaFound.setDescrizione(casaFromWeb.getDescrizione());
- 				casaFound.setPrezzo(casaFromWeb.getPrezzo());
- 				casaFound.setNumLocali(casaFromWeb.getNumLocali());
- 				casaFound.setMetriQuadri(casaFromWeb.getMetriQuadri());
- 				casaFound.setNumBagni(casaFromWeb.getNumBagni());
- 				casaFound.setPiano(casaFromWeb.getPiano());
- 				casaFound.setAgenzia(casaFromWeb.getAgenzia());
- 				
- 				if(casaFound.isNewAnnuncio()) {
- 					//un annuncio è nuovo per 2gg dalla data di last analyze
- 					long nDay = ((lastAnalyze.getTime()-casaFound.getNewDatetime().getTime())/(3600*24*1000));
- 					
- 					if(nDay	> 2) {
- 						casaFound.setNewAnnuncio(false);
- 						casaFound.setNewDatetime(null);
- 					}
- 					
- 				}else {
- 					casaFound.setNewDatetime(lastAnalyze);
- 				}
- 				
- 				casaFound.setLastAnalyze(lastAnalyze);
- 				casaRepository.saveAndFlush(casaFound);
- 				
- 			}else {
- 				casaFromWeb.setLastAnalyze(lastAnalyze);
- 				casaFromWeb.setNewDatetime(lastAnalyze);
- 				casaFromWeb.setNewAnnuncio(true);
- 				casaRepository.saveAndFlush(casaFromWeb);
+ 			if(zCasaRepository.findByIdAnnuncio(casaFromWeb.getIdAnnuncio()) == null) {
+ 			
+	 			Casa casaFound = casaRepository.findByIdAnnuncio(casaFromWeb.getIdAnnuncio());
+	 			if(casaFound != null) {
+	 				casaFound.setTitolo(casaFromWeb.getTitolo());
+	 				casaFound.setDescrizione(casaFromWeb.getDescrizione());
+	 				casaFound.setPrezzo(casaFromWeb.getPrezzo());
+	 				casaFound.setNumLocali(casaFromWeb.getNumLocali());
+	 				casaFound.setMetriQuadri(casaFromWeb.getMetriQuadri());
+	 				casaFound.setNumBagni(casaFromWeb.getNumBagni());
+	 				casaFound.setPiano(casaFromWeb.getPiano());
+	 				casaFound.setAgenzia(casaFromWeb.getAgenzia());
+	 				
+	 				if(casaFound.isNewAnnuncio()) {
+	 					//un annuncio è nuovo per 2gg dalla data di last analyze
+	 					long nDay = ((lastAnalyze.getTime()-casaFound.getNewDatetime().getTime())/(3600*24*1000));
+	 					
+	 					if(nDay	> 2) {
+	 						casaFound.setNewAnnuncio(false);
+	 						casaFound.setNewDatetime(null);
+	 					}
+	 					
+	 				}else {
+	 					casaFound.setNewDatetime(lastAnalyze);
+	 				}
+	 				
+	 				casaFound.setLastAnalyze(lastAnalyze);
+	 				casaRepository.saveAndFlush(casaFound);
+	 				
+	 			}else {
+	 				casaFromWeb.setLastAnalyze(lastAnalyze);
+	 				casaFromWeb.setNewDatetime(lastAnalyze);
+	 				casaFromWeb.setNewAnnuncio(true);
+	 				casaRepository.saveAndFlush(casaFromWeb);
+	 			}
  			}
 		}
  		
@@ -112,6 +110,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  				
  				zCasaRepository.saveAndFlush(casaToDelete);
  				casaRepository.delete(casa);
+ 			
  			} else {
  				
  				casa.setLastAnalyze(lastAnalyze);
@@ -234,8 +233,8 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 
 		System.out.println("analyze start");
 
-		List<Casa> duplicatiList = new ArrayList<>();
-		Set<Casa> duplicatiDaEscludereSet = new HashSet<>();
+//		List<Casa> duplicatiList = new ArrayList<>();
+//		Set<Casa> duplicatiDaEscludereSet = new HashSet<>();
 		
 		for (Casa casa1 : annunciList2) {
 
@@ -246,32 +245,32 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 				continue;
 			}
 
-			for (Casa casa2 : annunciList2) {
-
-				if(!casa1.getIdAnnuncio().equals(casa2.getIdAnnuncio()) 
-						&& !duplicatiDaEscludereSet.contains(casa2)
-						&& CasaComparator.equals(casa1, casa2)) {
-					duplicatiList.add(casa2);
-				}
-			}
-
-			if(!duplicatiList.isEmpty()) {
-				duplicatiMap.put(casa1, duplicatiList);
-				duplicatiDaEscludereSet.add(casa1);
-				duplicatiDaEscludereSet.addAll(duplicatiList);
-				annunciList.removeAll(duplicatiList);
-			}
-
-			duplicatiList = new ArrayList<>();
+//			for (Casa casa2 : annunciList2) {
+//
+//				if(!casa1.getIdAnnuncio().equals(casa2.getIdAnnuncio()) 
+//						&& !duplicatiDaEscludereSet.contains(casa2)
+//						&& CasaComparator.equals(casa1, casa2)) {
+//					duplicatiList.add(casa2);
+//				}
+//			}
+//
+//			if(!duplicatiList.isEmpty()) {
+//				duplicatiMap.put(casa1, duplicatiList);
+//				duplicatiDaEscludereSet.add(casa1);
+//				duplicatiDaEscludereSet.addAll(duplicatiList);
+//				annunciList.removeAll(duplicatiList);
+//			}
+//
+//			duplicatiList = new ArrayList<>();
 		}
 
 		//TODO remove in future
-		for (Map.Entry<Casa, List<Casa>> entry : duplicatiMap.entrySet()) {
-			System.out.println(
-					entry.getKey().toString() + "::" +
-					"num duplicati "+entry.getValue().size() + "::" +
-					entry.getValue().toString());
-		}
+//		for (Map.Entry<Casa, List<Casa>> entry : duplicatiMap.entrySet()) {
+//			System.out.println(
+//					entry.getKey().toString() + "::" +
+//					"num duplicati "+entry.getValue().size() + "::" +
+//					entry.getValue().toString());
+//		}
 	}
 
 	private void createCsvFile(List<Casa> casaList) throws IOException	{
