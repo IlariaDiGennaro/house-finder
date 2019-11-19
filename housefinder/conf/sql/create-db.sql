@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS `housefinder`;
 
-USE tutorialDb;
+USE housefinder;
 
 CREATE TABLE IF NOT EXISTS `casa` (
 	`id` INT NOT NULL AUTO_INCREMENT,
