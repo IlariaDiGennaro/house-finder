@@ -18,4 +18,6 @@ public interface CasaRepository extends JpaRepository<Casa, Integer> {
 	
 	@Query("SELECT c FROM Casa c WHERE c.lastAnalyze<(:lastAnalyze) OR c.lastAnalyze IS NULL")
     List<Casa> findByLastAnalyze(@Param("lastAnalyze") Date lastAnalyze);
+
+	List<Casa> findAllByOrderByNewAnnuncioDesc();
 }

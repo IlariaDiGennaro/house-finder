@@ -11,19 +11,19 @@ OK - definizione db bean e rework
 
 OK - MIGRAZIONE SPRING-BOOT
 
-- REWORK - API ricerca annunci case (in più oltre al precedente)
+OK - REWORK - API ricerca annunci case (in più oltre al precedente)
 	- se l'annuncio è già presente fa l'update di tutti i campi
 	- altrimenti crea una nuova entry
-	- eliminazione (logica?) annunci non più presenti sul sito
-		
+	- eliminazione (logica) annunci non più presenti sul sito
+
+OK - FUNZIONE concetto di nuovo annuncio
+	-- definizione db bean e rework
+	-- retrieve case mette in testa i nuovi annunci
 	
 - FUNZIONE annunci scartati
 
 - FUNZIONE concetto di duplicato (il primo trovato potrebbe non essere il più fresco)
 
-- FUNZIONE concetto di nuovo annuncio
-	-- definizione db bean e rework
-	
 - init file di configurazione ??
 
 - log file

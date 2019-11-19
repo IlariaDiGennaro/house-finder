@@ -53,8 +53,14 @@ public class Casa implements Serializable{
 	@Column(name = "agenzia")
 	private String agenzia;
 	
-	@Column(name = "lastAnalyze")
+	@Column(name = "last_analyze")
 	private Date lastAnalyze;
+	
+	@Column(name = "new_annuncio")
+	private boolean newAnnuncio;
+	
+	@Column(name = "new_datetime")
+	private Date newDatetime;
 	
 	public String getIdAnnuncio() {
 		return idAnnuncio;
@@ -128,6 +134,18 @@ public class Casa implements Serializable{
 	public void setLastAnalyze(Date lastAnalyze) {
 		this.lastAnalyze = lastAnalyze;
 	}
+	public boolean isNewAnnuncio() {
+		return newAnnuncio;
+	}
+	public void setNewAnnuncio(boolean newAnnuncio) {
+		this.newAnnuncio = newAnnuncio;
+	}
+	public Date getNewDatetime() {
+		return newDatetime;
+	}
+	public void setNewDatetime(Date newDatetime) {
+		this.newDatetime = newDatetime;
+	}
 	
 	@Override
 	public String toString() {
@@ -156,6 +174,10 @@ public class Casa implements Serializable{
 		builder.append(agenzia);
 		builder.append(", lastAnalyze=");
 		builder.append(lastAnalyze);
+		builder.append(", newAnnuncio=");
+		builder.append(newAnnuncio);
+		builder.append(", newDatetime=");
+		builder.append(newDatetime);
 		builder.append("]");
 		return builder.toString();
 	}

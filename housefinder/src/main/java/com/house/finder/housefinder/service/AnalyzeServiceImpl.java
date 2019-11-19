@@ -65,11 +65,28 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  				casaFound.setNumBagni(casaFromWeb.getNumBagni());
  				casaFound.setPiano(casaFromWeb.getPiano());
  				casaFound.setAgenzia(casaFromWeb.getAgenzia());
+ 				
+ 				if(casaFound.isNewAnnuncio()) {
+ 					//un annuncio è nuovo per 2gg dalla data di last analyze
+ 					long nDay = ((lastAnalyze.getTime()-casaFound.getNewDatetime().getTime())/(3600*24*1000));
+ 					
+ 					if(nDay	> 2) {
+ 						casaFound.setNewAnnuncio(false);
+ 						casaFound.setNewDatetime(null);
+ 					}
+ 					
+ 				}else {
+ 					casaFound.setNewDatetime(lastAnalyze);
+ 				}
+ 				
  				casaFound.setLastAnalyze(lastAnalyze);
- 				casaRepository.save(casaFound);
+ 				casaRepository.saveAndFlush(casaFound);
+ 				
  			}else {
  				casaFromWeb.setLastAnalyze(lastAnalyze);
- 				casaRepository.save(casaFromWeb);
+ 				casaFromWeb.setNewDatetime(lastAnalyze);
+ 				casaFromWeb.setNewAnnuncio(true);
+ 				casaRepository.saveAndFlush(casaFromWeb);
  			}
 		}
  		
@@ -96,8 +113,9 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  				zCasaRepository.saveAndFlush(casaToDelete);
  				casaRepository.delete(casa);
  			} else {
+ 				
  				casa.setLastAnalyze(lastAnalyze);
- 				casaRepository.save(casa);
+ 				casaRepository.saveAndFlush(casa);
  			}
 		}
 		

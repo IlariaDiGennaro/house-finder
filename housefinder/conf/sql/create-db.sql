@@ -42,3 +42,7 @@ CREATE TABLE `z_casa` (
 )
 COLLATE='utf8mb4_unicode_ci'
 ;
+
+ALTER TABLE `casa`
+	ADD COLUMN `new_annuncio` TINYINT(4) NOT NULL DEFAULT '0' AFTER `last_analyze`,
+	ADD COLUMN `new_datetime` DATETIME NULL DEFAULT NULL AFTER `new_annuncio`;

@@ -16,7 +16,7 @@ public class CasaServiceImpl implements CasaService {
 	
 	@Override
 	public List<Casa> getAllCase() {
-		return casaRepository.findAll();
+		return casaRepository.findAllByOrderByNewAnnuncioDesc();
 	}
 
 }
