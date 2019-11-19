@@ -14,6 +14,7 @@ OK - MIGRAZIONE SPRING-BOOT
 - REWORK - API ricerca annunci case (in più oltre al precedente)
 	- se l'annuncio è già presente fa l'update di tutti i campi
 	- altrimenti crea una nuova entry
+	- eliminazione (logica?) annunci non più presenti sul sito
 		
 	
 - FUNZIONE annunci scartati

@@ -15,15 +15,19 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.house.finder.housefinder.bean.Casa;
 import com.house.finder.housefinder.bean.util.CasaComparator;
-import com.house.finder.housefinder.dao.CasaDao;
+import com.house.finder.housefinder.dao.CasaRepository;
 import com.house.finder.housefinder.site.bean.ImmobiliareIt;
 
 @Service
 public class AnalyzeServiceImpl implements AnalyzeService {
+	
+	@Autowired
+	public CasaRepository casaRepository;
 	
 	public static List<Casa> annunciList = new ArrayList<>();
 	public static List<Casa> nuoveCostruzioniList = new ArrayList<>();
@@ -38,18 +42,29 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 		firstCleaningAnnunnci();
 		System.out.println("annunci normalizzati trovati: "+annunciList.size());
 		
-		CasaDao casaDao = new CasaDao();
 		
-		Iterator<Casa> it = annunciList.iterator();
- 		while (it.hasNext()) {
-			casaDao.createOrUpdate(it.next(),it.hasNext());
+		Iterator<Casa> casaIter = annunciList.iterator();
+ 		while (casaIter.hasNext()) {
+ 			
+ 			Casa casaFromWeb = casaIter.next();
+ 			
+ 			Casa casaFound = casaRepository.findByIdAnnuncio(casaFromWeb.getIdAnnuncio());
+ 			if(casaFound != null) {
+ 				casaFound.setTitolo(casaFromWeb.getTitolo());
+ 				casaFound.setDescrizione(casaFromWeb.getDescrizione());
+ 				casaFound.setPrezzo(casaFromWeb.getPrezzo());
+ 				casaFound.setNumLocali(casaFromWeb.getNumLocali());
+ 				casaFound.setMetriQuadri(casaFromWeb.getMetriQuadri());
+ 				casaFound.setNumBagni(casaFromWeb.getNumBagni());
+ 				casaFound.setPiano(casaFromWeb.getPiano());
+ 				casaFound.setAgenzia(casaFromWeb.getAgenzia());
+ 				casaRepository.save(casaFound);
+ 			}else {
+ 				casaRepository.save(casaFromWeb);
+ 			}
 		}
 		
-//		for (Casa casa : annunciList) {
-//			casaDao.createOrUpdate(casa);
-//		}
-		
-		List<Casa> casaList = casaDao.getAll();
+		List<Casa> casaList = casaRepository.findAll();
 		createCsvFile(casaList);
 	}
 	
