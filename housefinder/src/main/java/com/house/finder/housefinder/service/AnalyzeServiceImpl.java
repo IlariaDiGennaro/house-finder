@@ -124,6 +124,8 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  			}
 		}
  		System.out.println("... end.");
+ 		
+ 		annunciList.clear();
 		
 		List<Casa> casaList = casaRepository.findAll();
 		createCsvFile(casaList);
@@ -191,10 +193,10 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 						// DEFINE HOUSE INFO
 						String homeDatatoDefine = lis.get(j).text();
 
-						if(homeDatatoDefine.contains("â‚¬")) {
-							if(homeDatatoDefine.lastIndexOf("â‚¬")!=0) {
+						if(homeDatatoDefine.contains("€")) {
+							if(homeDatatoDefine.lastIndexOf("€")!=0) {
 								//remove old price
-								casa.setPrezzo(homeDatatoDefine.substring(0, homeDatatoDefine.lastIndexOf("â‚¬")-1));
+								casa.setPrezzo(homeDatatoDefine.substring(0, homeDatatoDefine.lastIndexOf("€")-1));
 							} else {
 								casa.setPrezzo(homeDatatoDefine);
 							}
