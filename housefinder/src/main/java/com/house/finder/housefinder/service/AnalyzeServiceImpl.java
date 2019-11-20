@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.jsoup.HttpStatusException;
@@ -45,10 +44,11 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 		
 		Date lastAnalyze = new Date();
 		
-		Iterator<Casa> casaIter = annunciList.iterator();
- 		while (casaIter.hasNext()) {
- 			
- 			Casa casaFromWeb = casaIter.next();
+		System.out.println("create or update start ... ");
+		for (int i = 0; i < annunciList.size(); i++) {
+			
+ 			Casa casaFromWeb = annunciList.get(i);
+ 			if(i%50 == 0) System.out.println("... continuing ...");
  			
  			if(zCasaRepository.findByIdAnnuncio(casaFromWeb.getIdAnnuncio()) == null) {
  			
@@ -80,6 +80,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	 				casaRepository.saveAndFlush(casaFound);
 	 				
 	 			}else {
+	 				System.out.println("there's a ne annuncio");
 	 				casaFromWeb.setLastAnalyze(lastAnalyze);
 	 				casaFromWeb.setNewDatetime(lastAnalyze);
 	 				casaFromWeb.setNewAnnuncio(true);
@@ -88,6 +89,9 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  			}
 		}
  		
+ 		System.out.println("... end.");
+ 		
+ 		System.out.println("check for delete start ... ");
  		List<Casa> casaListToDelete = casaRepository.findByLastAnalyze(lastAnalyze);
  		for (Casa casa : casaListToDelete) {
 			
@@ -110,6 +114,8 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  				
  				zCasaRepository.saveAndFlush(casaToDelete);
  				casaRepository.delete(casa);
+ 				
+ 				System.out.println("a delete");
  			
  			} else {
  				
@@ -117,6 +123,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  				casaRepository.saveAndFlush(casa);
  			}
 		}
+ 		System.out.println("... end.");
 		
 		List<Casa> casaList = casaRepository.findAll();
 		createCsvFile(casaList);

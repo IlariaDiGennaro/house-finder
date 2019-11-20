@@ -30,15 +30,15 @@ public class AnnunciRest {
 	}
 	
 	@GetMapping(value = "/analyze")
-	public ResponseEntity<Object> analyze() throws IOException { 
+	public ResponseEntity<Void> analyze() throws IOException { 
 		//TODO GESTIONE ECCEZIONE
 		analyzeService.analyze();
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
 	@PostMapping("/scarta")
-	public ResponseEntity<Object> scartaCase(@RequestBody ScartaCasaRequest scartaCasaRequest) {
+	public ResponseEntity<Void> scartaCase(@RequestBody ScartaCasaRequest scartaCasaRequest) {
 		casaService.scartaCase(scartaCasaRequest.getScarta());
-	    return new ResponseEntity<>(null, HttpStatus.OK);
+	    return new ResponseEntity<Void>(HttpStatus.OK);
 	  }
 }
