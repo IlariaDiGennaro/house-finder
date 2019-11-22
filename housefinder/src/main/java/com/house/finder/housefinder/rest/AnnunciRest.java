@@ -18,10 +18,9 @@ import com.house.finder.housefinder.service.CasaService;
 public class AnnunciRest {
 
 	@Autowired
-	CasaService casaService;
-	
+	private CasaService casaService;
 	@Autowired
-	AnalyzeService analyzeService;
+	private AnalyzeService analyzeService;
 
 	
 	@GetMapping(value = "/case")
