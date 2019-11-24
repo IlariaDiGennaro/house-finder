@@ -6,7 +6,7 @@ public class ImmobiliareIt {
 	//https://www.immobiliare.it/vendita-case/roma/?criterio=rilevanza&prezzoMassimo=400000&tipoProprieta=1&idMZona[]=10151&idMZona[]=10152&noAste=1&localiMinimo=3&tipoProprieta=1&fasciaPiano[]=20&pag=
 	
 	private static String basicImmobiliareItUrl = "https://www.immobiliare.it/vendita-case/roma/?criterio=rilevanza";
-	private static String priceParam = "&prezzoMassimo=400000";
+	private static String priceParam = "&prezzoMassimo=380000";
 	private static String propertyTypeParam = "&tipoProprieta=1";
 	private static String zoneParam = "&idMZona[]=10151&idMZona[]=10152";
 	private static String noAste = "&noAste=1";
