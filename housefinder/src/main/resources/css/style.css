@@ -1,0 +1,32 @@
+body {
+  background-color: lightblue;
+}
+.listing-features {
+	padding-left: 10;
+	list-style: none;
+	list-style-position: initial;
+	list-style-image: initial;
+	list-style-type: none;
+}
+
+div.list-piped {
+	margin-left: -8px;
+}
+
+div.lif__item {
+	display: inline-block;
+	vertical-align: middle;
+	padding-left: px;
+	padding-right: 18px;
+	font-size: 30px
+}
+
+div.listing-item {
+	padding-bottom: 15px;
+	padding-top: 15px;
+	padding-left: 300px;
+	padding-right: 300px;
+	transform-origin: top;
+	cursor: pointer;
+	border-top: 6px solid;
+}

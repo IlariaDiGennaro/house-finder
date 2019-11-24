@@ -24,6 +24,6 @@ public class AnnunciController {
 	public String viewHomePage(Model model) {
 	    List<Casa> listCasa = casaService.getAllCase();
 	    model.addAttribute("listCasa", listCasa);
-	    return "index";
+	    return "index3";
 	}
 }

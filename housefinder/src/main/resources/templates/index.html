@@ -13,7 +13,7 @@
         <thead>
             <tr>
                 <th>Annuncio ID</th>
-                <th>Titolo</th>
+                <th>Titolo pino</th>
                 <th>Link</th>
             </tr>
         </thead>
@@ -21,13 +21,18 @@
             <tr th:each="casa : ${listCasa}">
                 <td th:text="${casa.idAnnuncio}">Annuncio ID</td>
                 <td th:text="${casa.titolo}">Titolo</td>
-                <td th:text="${casa.link}">Link</td>
+                <td><a th:href="${casa.link}">LINK</a></td>
                 <!-- <td>
                     <a th:href="/@{'/edit/' + ${product.id}}">Edit</a>
                     &nbsp;&nbsp;&nbsp;
                     <a th:href="/@{'/delete/' + ${product.id}}">Delete</a>
                 </td> -->
             </tr>
+                <!-- <td>
+                    <a th:href="/@{'/edit/' + ${product.id}}">Edit</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a th:href="/@{'/delete/' + ${product.id}}">Delete</a>
+                </td> -->
         </tbody>
     </table>
 </div>   

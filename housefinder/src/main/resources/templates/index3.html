@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>House Finder</title>
+<link rel="stylesheet" href="../css/style.css" />
+<!-- <style>
+.listing-features {
+	padding-left: 10;
+	list-style: none;
+	list-style-position: initial;
+	list-style-image: initial;
+	list-style-type: none;
+}
+
+.list-piped {
+	margin-left: -8px;
+}
+
+.lif__item {
+	display: inline-block;
+	vertical-align: middle;
+	padding-left: px;
+	padding-right: 18px;
+	font-size: 30px
+}
+
+.listing-item {
+	padding-bottom: 15px;
+	padding-top: 15px;
+	padding-left: 300px;
+	padding-right: 300px;
+	transform-origin: top;
+	cursor: pointer;
+	border-top: 6px solid;
+}
+</style> -->
+</head>
+
+<body>
+	<div>
+		<h1>ELENCO ANNUNCI</h1>
+		<div th:each="casa : ${listCasa}" class="listing-item">
+			<p>
+				<a th:href="${casa.link}" th:text="${casa.titolo}">Trilocale via
+					Ferdinando Gregorovius, Appio Latino, Roma </a>
+			</p>
+			<ul class="listing-features list-piped">
+				<li class="lif__item">
+					<div>
+						<span th:text="${casa.prezzo}">€ 319.000</span>
+					</div>
+				</li>
+				<li class="lif__item">
+					<div>
+						<span th:text="${casa.numLocali}">3 locali</span>
+					</div>
+				</li>
+				<li class="lif__item">
+					<div>
+						<span th:text="${casa.metriQuadri}">102</span>
+						<!-- &nbsp;m <sup>2</sup> superficie  -->
+					</div>
+				</li>
+				<li class="lif__item">
+					<div>
+						<span th:text="${casa.numBagni}">1 bagni</span>
+					</div>
+				</li>
+				<li class="lif__item">
+					<div>
+						<span th:text="${casa.piano}">1 piano</span>
+					</div>
+				</li>
+			</ul>
+			<div>
+				<p th:text="${casa.descrizione}">Rif: 119/19 - vendiamo un
+					appartamento in Roma in zona Appio Latino e più precisamente in Via
+					Ferdinando Gregorovius in stabile in tinta ripulita proponiamo un
+					appartamento posto al primo piano alto composto da ampio ingresso
+					salone 2 camere matrimoniali cucina abitabile bagno ripostiglio con
+					possibilità di ricavare il secondo servizio Balcone per...</p>
+			</div>
+			<div>
+				<p th:text="${casa.agenzia}">remax</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
