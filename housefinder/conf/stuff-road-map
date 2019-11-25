@@ -29,3 +29,11 @@ ok - API annunci scartati
 - log file
 
 - update DB annunci
+
+
+
+#######
+query
+
+SELECT * FROM casa c WHERE c.titolo LIKE '%giovanni%' OR c.descrizione LIKE '%giovanni%';
+SELECT * FROM casa c WHERE c.titolo LIKE '%re di%' OR c.descrizione LIKE '%re di%';
