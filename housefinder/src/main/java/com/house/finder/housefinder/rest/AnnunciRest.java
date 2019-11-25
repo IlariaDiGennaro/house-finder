@@ -10,18 +10,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.house.finder.housefinder.rest.data.CreateSelectedHouseRequest;
 import com.house.finder.housefinder.rest.data.ScartaCasaRequest;
 import com.house.finder.housefinder.service.AnalyzeService;
 import com.house.finder.housefinder.service.CasaService;
+import com.house.finder.housefinder.service.SelectedHouseService;
 
 @Controller
 public class AnnunciRest {
 
 	@Autowired
-	CasaService casaService;
-	
+	public CasaService casaService;
 	@Autowired
-	AnalyzeService analyzeService;
+	public AnalyzeService analyzeService;
+	@Autowired
+	public SelectedHouseService selectedHouseService;
 
 	
 	@GetMapping(value = "/case")
@@ -39,6 +42,20 @@ public class AnnunciRest {
 	@PostMapping("/scarta")
 	public ResponseEntity<Void> scartaCase(@RequestBody ScartaCasaRequest scartaCasaRequest) {
 		casaService.scartaCase(scartaCasaRequest.getScarta());
-	    return new ResponseEntity<Void>(HttpStatus.OK);
-	  }
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	
+	//SELECTED HOUSE
+	
+	@GetMapping(value = "/selected-house")
+	public ResponseEntity<Object> getAllPreferredHouse() { 
+		return new ResponseEntity<>(selectedHouseService.getAllCase(), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/selected-house")
+	public ResponseEntity<Void> createSelectedHouse(@RequestBody CreateSelectedHouseRequest createSelectedHouseRequest) {
+		selectedHouseService.createSelectedHouse(createSelectedHouseRequest.getIdAnnuncio());
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }

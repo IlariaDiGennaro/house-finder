@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.house.finder.housefinder.bean.Casa;
 import com.house.finder.housefinder.bean.ZCasa;
 import com.house.finder.housefinder.dao.CasaRepository;
+import com.house.finder.housefinder.dao.SelectedHouseRepository;
 import com.house.finder.housefinder.dao.ZCasaRepository;
 import com.house.finder.housefinder.site.bean.ImmobiliareIt;
 
@@ -28,6 +29,8 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	public CasaRepository casaRepository;
 	@Autowired
 	public ZCasaRepository zCasaRepository;
+	@Autowired
+	public SelectedHouseRepository selectedHouseRepository;
 	
 	public static List<Casa> annunciList = new ArrayList<>();
 	public static List<Casa> nuoveCostruzioniList = new ArrayList<>();
@@ -50,7 +53,8 @@ public class AnalyzeServiceImpl implements AnalyzeService {
  			Casa casaFromWeb = annunciList.get(i);
  			if(i%50 == 0) System.out.println("... continuing ...");
  			
- 			if(zCasaRepository.findByIdAnnuncio(casaFromWeb.getIdAnnuncio()) == null) {
+ 			if(zCasaRepository.findByIdAnnuncio(casaFromWeb.getIdAnnuncio()) == null &&
+ 					selectedHouseRepository.findByIdAnnuncio(casaFromWeb.getIdAnnuncio()) == null) {
  			
 	 			Casa casaFound = casaRepository.findByIdAnnuncio(casaFromWeb.getIdAnnuncio());
 	 			if(casaFound != null) {
