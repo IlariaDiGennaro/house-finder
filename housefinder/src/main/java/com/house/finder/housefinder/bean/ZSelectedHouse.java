@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "selected_house")
-public class SelectedHouse {
+@Table(name = "z_selected_house")
+public class ZSelectedHouse {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -140,7 +140,7 @@ public class SelectedHouse {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SelectedHouse [id=");
+		builder.append("ZSelectedHouse [id=");
 		builder.append(id);
 		builder.append(", idAnnuncio=");
 		builder.append(idAnnuncio);
@@ -167,5 +167,5 @@ public class SelectedHouse {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

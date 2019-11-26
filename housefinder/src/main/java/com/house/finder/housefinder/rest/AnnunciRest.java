@@ -58,4 +58,10 @@ public class AnnunciRest {
 		selectedHouseService.createSelectedHouse(createSelectedHouseRequest.getIdAnnuncio());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/selected-house/analyze")
+	public ResponseEntity<Void> analyzeSelectedHouse() throws IOException {
+		selectedHouseService.analyzeSelectedHouse();
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }
