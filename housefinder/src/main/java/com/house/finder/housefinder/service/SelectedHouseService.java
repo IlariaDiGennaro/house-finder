@@ -30,10 +30,6 @@ public class SelectedHouseService {
 	@Autowired
 	public ZSelectedHouseRepository zSelectedHouseRepository;
 
-	public Object getAllCase() {
-		return selectedHouseRepository.findAll();
-	}
-
 	public void createSelectedHouse(String idAnnuncio) {
 		
 		Casa casaFound = casaRepository.findByIdAnnuncio(idAnnuncio);
@@ -93,5 +89,9 @@ public class SelectedHouseService {
 			}
 		}
 		
+	}
+
+	public List<SelectedHouse> getAllCase() {
+		return selectedHouseRepository.findAll();
 	}
 }
