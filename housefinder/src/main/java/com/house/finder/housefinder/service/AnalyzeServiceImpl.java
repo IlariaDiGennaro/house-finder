@@ -21,6 +21,7 @@ import com.house.finder.housefinder.dao.CasaRepository;
 import com.house.finder.housefinder.dao.SelectedHouseRepository;
 import com.house.finder.housefinder.dao.ZCasaRepository;
 import com.house.finder.housefinder.site.bean.ImmobiliareIt;
+import com.jayway.jsonpath.JsonPath;
 
 @Service
 public class AnalyzeServiceImpl implements AnalyzeService {
@@ -35,6 +36,35 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	public static List<Casa> annunciList = new ArrayList<>();
 	public static List<Casa> nuoveCostruzioniList = new ArrayList<>();
 //	public static HashMap<Casa, List<Casa>> duplicatiMap = new HashMap<Casa, List<Casa>>();
+	
+	private void detailsAnalize_WIP() throws IOException {
+		Document doc = Jsoup.connect(ImmobiliareIt.getDetailsImmobilareItUrl("77791598")).get();
+
+		Element element = doc.getElementById("js-hydration");
+
+		String infoJson = element.toString();
+		infoJson = infoJson.replace("<script type=\"application/json\" id=\"js-hydration\">", "").replace("</script>", "");
+
+
+		System.out.println(infoJson);
+
+		System.out.println(JsonPath.parse(infoJson).read("$.multimedia.immagini.list").toString());
+		
+		/*
+		 *String jsonString = "{\"delivery_codes\": [{\"postal_code\": {\"district\": \"Ghaziabad\", \"pin\": 201001, \"pre_paid\": \"Y\", \"cash\": \"Y\", \"pickup\": \"Y\", \"repl\": \"N\", \"cod\": \"Y\", \"is_oda\": \"N\", \"sort_code\": \"GB\", \"state_code\": \"UP\"}}]}";
+ String jsonExp = "$.delivery_codes";
+ JsonNode pincodes = JsonPath.read(jsonExp, jsonString, JsonNode.class);
+ System.out.println("pincodesJson : "+pincodes);
+ 
+  for(int i = 0; i< pincodes.size();i++){
+    JsonNode node = pincodes.get(i);
+    String pin = JsonPath.read("$.postal_code.pin", node, String.class);
+    String district = JsonPath.read("$.postal_code.district", node, String.class);
+    System.out.println("pin :: " + pin + " district :: " + district );
+}
+		*/
+	}
+	
 	
 	@Override
 	public void analyze() throws IOException {
@@ -151,13 +181,17 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 		String immobiliareItUrl = ImmobiliareIt.getImmobilareItUrl();
 		
 		for (int i = 1; i <= maxPage; i++) {
-
-			Document doc = Jsoup.connect(immobiliareItUrl.concat(String.valueOf(i))).get();
+			
+			Document doc = null;
+			if(i == 1) {
+				doc = Jsoup.connect(immobiliareItUrl).get();
+			} else {
+				doc = Jsoup.connect(immobiliareItUrl.concat("&pag=").concat(String.valueOf(i))).get();
+			}
 
 			if (i==1) {
 				Elements ul = doc.select("ul.pagination__number");
 				maxPage = Integer.valueOf(ul.select("li").last().text());
-//				System.out.println("PAGINE DA ANALIZZARE: "+maxPage);
 			}
 
 			Elements adlist = doc.select("div.listing-item_body");
