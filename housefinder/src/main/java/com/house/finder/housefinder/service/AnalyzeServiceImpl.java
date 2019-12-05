@@ -114,7 +114,7 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	 				casaRepository.saveAndFlush(casaFound);
 	 				
 	 			}else {
-	 				System.out.println("there's a ne annuncio");
+	 				System.out.println("there's a new annuncio");
 	 				casaFromWeb.setLastAnalyze(lastAnalyze);
 	 				casaFromWeb.setNewDatetime(lastAnalyze);
 	 				casaFromWeb.setNewAnnuncio(true);

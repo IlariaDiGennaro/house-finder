@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Abel&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" >
+    <title>HOUSE FINDER</title>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <h1>HOUSE FINDER</h1>
+        </div>
+        <ul class="nav-ul">
+            <li><a href="#">NEW ADS</a></li>
+            <!-- <li><a href="#">ANALYZE </br> SELECTED ADS</a></li> -->
+        </ul>
+    </nav>
+
+    <body>
+        <div th:each="casa : ${listCasa}" class="listing-item">
+            <p>
+                <a th:href="${casa.link}" th:text="${casa.titolo}">Trilocale via
+                    Ferdinando Gregorovius, Appio Latino, Roma </a>
+            </p>
+            <ul class="listing-features list-piped">
+                <li class="lif__item">
+                    <div>
+                        <span th:text="${casa.prezzo}">€ 319.000</span>
+                    </div>
+                </li>
+                <li class="lif__item">
+                    <div>
+                        <span th:text="${casa.numLocali}">3 locali</span>
+                    </div>
+                </li>
+                <li class="lif__item">
+                    <div>
+                        <span th:text="${casa.metriQuadri}">102</span>
+                        <!-- &nbsp;m <sup>2</sup> superficie  -->
+                    </div>
+                </li>
+                <li class="lif__item">
+                    <div>
+                        <span th:text="${casa.numBagni}">1 bagni</span>
+                    </div>
+                </li>
+                <li class="lif__item">
+                    <div>
+                        <span th:text="${casa.piano}">1 piano</span>
+                    </div>
+                </li>
+            </ul>
+            <div>
+                <p th:text="${casa.descrizione}">Rif: 119/19 - vendiamo un
+                    appartamento in Roma in zona Appio Latino e più precisamente in Via
+                    Ferdinando Gregorovius in stabile in tinta ripulita proponiamo un
+                    appartamento posto al primo piano alto composto da ampio ingresso
+                    salone 2 camere matrimoniali cucina abitabile bagno ripostiglio con
+                    possibilità  di ricavare il secondo servizio Balcone per...</p>
+            </div>
+            <div>
+                <p th:text="${casa.agenzia}">remax</p>
+            </div>
+        </div>
+    </body>
+</body>
+
+</html>
