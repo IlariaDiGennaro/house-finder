@@ -1,5 +1,47 @@
 HOUSE FINDER
 
++ Ui - homepage	
+	elenco delle case non ancora visionate	
+		
+	+ azioni - elenco
+		possibilità  di scartare l annuncio aggiungendo una motivazione obbligatoria 
+		possibilità  di confermare l annuncio aggiungendo delle considerazioni
+	+ performance - elenco
+		caricare a run time annuncio dopo annuncio. combo tra preview e dettagli
+	+ be - elenco
+		gestione delle immagini - scaricarle e salvarle sul db?
+		gestione delle considerazioni per gli annunci accettati
+	+ ui - elenco
+		studio fattibilità utilizzo di wordpress + elementor per creare il layout della pagina (in locale)
+			xampp (pc aziendale sembra avere la porta 80 occupata)
+		Thymeleaf sembra essere imprescindibile per la dinamicità della lista delle case
+
+
+flow ANALYZE
+
+-per ogni annuncio creo la struttura dati casa
+	se non è stato già scartato && se non è gia stato selezionato
+		lo salvo nel db TMP + last_analyze
+	
+per ogni casa_tmp 
+	controllo se è già presente ma con un altro id (sul db) (risottomissione), l'annuncio sospetto dovrebbe essere stato eliminato (403)
+		se è sospetto ed è stato eliminato allora aggiorno tutto tranne la data di immissione + aggiorno un contatore
+		
+per ogni casa_orig
+	controllo che l'annuncio non sia stato eliminato
+
+
+-per ogni casa controllo che 
+
+#####################################################################################################################################
+
+https://jgalacambra.wordpress.com/2016/06/08/writing-a-file-using-thymeleaf/
+http://cristianruizblog.com/spring-boot-mvc-part-2-using-thymeleaf/
+https://distigme.wordpress.com/2012/10/04/why-thymeleaf/
+https://doanduyhai.wordpress.com/2012/04/14/spring-mvc-part-iv-thymeleaf-advanced-usage/
+
+#####################################################################################################################################
+
 OK - API ricerca annunci case (immobiliare.it)
 	-- retrieve dati dal sito & manipolazione dei dati
 	-- rimozione duplicati + salvataggio
