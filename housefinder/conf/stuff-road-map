@@ -16,8 +16,26 @@ HOUSE FINDER
 			xampp (pc aziendale sembra avere la porta 80 occupata)
 		Thymeleaf sembra essere imprescindibile per la dinamicit√† della lista delle case
 
+#####################################################################################################################################
 
 flow ANALYZE
+
+a partire dalla lista delle case (immobiliareIt):
+- chiamata al dettaglio dell'annuncio 
+	c'Ë nella HOUSE_REJECTED ? NO --> vai avanti
+	
+	crea la house_tmp
+	
+	c'Ë nella HOUSE_SELECTED ? SI --> aggiorna i campi nella HOUSE_SELECTED
+	SE NO --> salvo nella HOUSE_TMP
+	
+- per ogni HOUSE_TMP mi chiedo ?
+	c'Ë un annuncio che Ë "molto simile" a un annuncio nella HOUSE_SELECTED e che ora Ë DELETED ? 
+	--> allora Ë una RISOTTOMISSIONE -> quindi HOUSE_TMP divneta HOUSE_SELECTED (tranne nella data_annuncio + contatore) ed HOUSE_SELECTED va in HOUSE_DELETED
+
+- per ogni HOUSE_SELECTED verifico che sia ancora presente.
+
+#####################################################################################################################################
 
 -per ogni annuncio creo la struttura dati casa
 	se non √® stato gi√† scartato && se non √® gia stato selezionato
@@ -30,8 +48,6 @@ per ogni casa_tmp
 per ogni casa_orig
 	controllo che l'annuncio non sia stato eliminato
 
-
--per ogni casa controllo che 
 
 #####################################################################################################################################
 
