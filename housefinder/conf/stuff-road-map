@@ -22,16 +22,16 @@ flow ANALYZE
 
 a partire dalla lista delle case (immobiliareIt):
 - chiamata al dettaglio dell'annuncio 
-	c'è nella HOUSE_REJECTED ? NO --> vai avanti
+	c'ï¿½ nella HOUSE_REJECTED ? NO --> vai avanti
 	
 	crea la house_tmp
 	
-	c'è nella HOUSE_SELECTED ? SI --> aggiorna i campi nella HOUSE_SELECTED
-	SE NO --> salvo nella HOUSE_TMP
+	c'ï¿½ nella HOUSE_SELECTED o nella HOUSE_TMP? SI --> aggiorna i campi nella HOUSE_SELECTED o nella HOUSE_TMP
+	SE NO --> salvo nella HOUSE_TMP_to_be_evaluated
 	
-- per ogni HOUSE_TMP mi chiedo ?
-	c'è un annuncio che è "molto simile" a un annuncio nella HOUSE_SELECTED e che ora è DELETED ? 
-	--> allora è una RISOTTOMISSIONE -> quindi HOUSE_TMP divneta HOUSE_SELECTED (tranne nella data_annuncio + contatore) ed HOUSE_SELECTED va in HOUSE_DELETED
+- per ogni HOUSE_TMP_to_be_evaluated mi chiedo ?
+	c'ï¿½ un annuncio che ï¿½ "molto simile" a un annuncio nella HOUSE_SELECTED e che ora ï¿½ DELETED ? 
+	--> allora ï¿½ una RISOTTOMISSIONE -> quindi HOUSE_TMP diventa HOUSE_SELECTED (tranne nella data_annuncio + contatore) ed HOUSE_SELECTED va in HOUSE_DELETED
 
 - per ogni HOUSE_SELECTED verifico che sia ancora presente.
 

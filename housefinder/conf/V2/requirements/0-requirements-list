@@ -1,0 +1,46 @@
+- ad-analyzer
+- reject-house
+- selected-house
+
+
+// future develop
+- insert house (private ads)
+- update note for analyzed house, update all for insert house
+
+
+################
+costo:
+
+- ad-analyzer
+-1 SELECT (HOUSE)
+a--1 SELECT (HOUSE TMP)
+---1 UPDATE (HOUSE TMP)
+---n UPDATE (HOUSE_IMAGE_TMP)
+b--1 SELECT (HOUSE)
+---1 UPDATE (HOUSE)
+---n UPDATE (HOUSE_IMAGE)
+c--1 INSERT (HOUSE TMP)
+---n UPDATE (HOUSE_IMAGE_TMP)
+d--1 UPDATE (HOUSE)
+
+
+- reject house
+a-1 SELECT (HOUSE TMP)
+---1 INSERT (HOUSE)
+---1 INSERT (HOUSE_HISTORY)
+---n INSERT (HOUSE_IMAGE)
+---1 DELETE (HOUSE TMP)
+---n DELETE (HOUSE_IMAGE_TMP)
+b-2 SELECT (HOUSE)
+---1 INSERT (HOUSE_HISTORY)
+
+
+- selected house
+a-1 SELECT (HOUSE TMP)
+---1 INSERT (HOUSE)
+---1 INSERT (HOUSE_HISTORY)
+---n INSERT (HOUSE_IMAGE)
+---1 DELETE (HOUSE TMP)
+---n DELETE (HOUSE_IMAGE_TMP)
+b-1 SELECT (HOUSE)
+---1 INSERT (HOUSE_HISTORY)

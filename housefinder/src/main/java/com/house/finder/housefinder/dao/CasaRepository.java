@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.house.finder.housefinder.bean.Casa;
 
+@Deprecated
 @Repository
 public interface CasaRepository extends JpaRepository<Casa, Integer> {
 

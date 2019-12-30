@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.house.finder.housefinder.bean.ZCasa;
 
+@Deprecated
 @Repository
 public interface ZCasaRepository extends JpaRepository<ZCasa, Integer> {
 

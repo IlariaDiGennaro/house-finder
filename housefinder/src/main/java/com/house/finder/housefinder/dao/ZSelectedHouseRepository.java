@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.house.finder.housefinder.bean.ZSelectedHouse;
 
+@Deprecated
 @Repository
 public interface ZSelectedHouseRepository extends JpaRepository<ZSelectedHouse, Integer> {
 

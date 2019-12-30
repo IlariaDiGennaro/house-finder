@@ -16,6 +16,7 @@ import com.house.finder.housefinder.service.AnalyzeService;
 import com.house.finder.housefinder.service.CasaService;
 import com.house.finder.housefinder.service.SelectedHouseService;
 
+@Deprecated
 @Controller
 public class AnnunciRest {
 
@@ -28,11 +29,13 @@ public class AnnunciRest {
 
 	
 	@GetMapping(value = "/case")
+	@Deprecated
 	public ResponseEntity<Object> getAll() { 
 		return new ResponseEntity<>(casaService.getAllCase(), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/analyze")
+	@Deprecated
 	public ResponseEntity<Void> analyze() throws IOException { 
 		//TODO GESTIONE ECCEZIONE
 		analyzeService.analyze();
@@ -40,6 +43,7 @@ public class AnnunciRest {
 	}
 
 	@PostMapping("/scarta")
+	@Deprecated
 	public ResponseEntity<Void> scartaCase(@RequestBody ScartaCasaRequest scartaCasaRequest) {
 		casaService.scartaCase(scartaCasaRequest.getScarta());
 		return new ResponseEntity<Void>(HttpStatus.OK);
@@ -49,11 +53,13 @@ public class AnnunciRest {
 	//SELECTED HOUSE
 	
 	@GetMapping(value = "/selected-house")
+	@Deprecated
 	public ResponseEntity<Object> getAllPreferredHouse() { 
 		return new ResponseEntity<>(selectedHouseService.getAllCase(), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/selected-house")
+	@Deprecated
 	public ResponseEntity<Void> createSelectedHouse(@RequestBody CreateSelectedHouseRequest createSelectedHouseRequest) {
 		selectedHouseService.createSelectedHouse(createSelectedHouseRequest.getIdAnnuncio());
 		return new ResponseEntity<Void>(HttpStatus.OK);

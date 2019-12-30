@@ -14,16 +14,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "house_image")
-public class HouseImage {
+@Table(name = "house_tmp_image")
+public class HouseTmpImage {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Integer id;
 //	@JsonIgnore
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch=FetchType.LAZY)
-	@JoinColumn(name = "house_id")
-	public House house;
+	@JoinColumn(name = "house_tmp_id")
+	public HouseTmp houseTmp;
 	@Column(name = "url", nullable = false)
 	public String url;
 	@Enumerated(EnumType.STRING)
@@ -36,11 +36,11 @@ public class HouseImage {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public House getHouse() {
-		return house;
+	public HouseTmp getHouseTmp() {
+		return houseTmp;
 	}
-	public void setHouse(House house) {
-		this.house = house;
+	public void setHouseTmp(HouseTmp houseTmp) {
+		this.houseTmp = houseTmp;
 	}
 	public String getUrl() {
 		return url;
@@ -54,5 +54,4 @@ public class HouseImage {
 	public void setHouseImageType(HouseImageType houseImageType) {
 		this.houseImageType = houseImageType;
 	}
-	
 }

@@ -21,6 +21,7 @@ import com.house.finder.housefinder.dao.CasaRepository;
 import com.house.finder.housefinder.dao.SelectedHouseRepository;
 import com.house.finder.housefinder.dao.ZCasaRepository;
 import com.house.finder.housefinder.site.bean.ImmobiliareIt;
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 @Service
@@ -37,7 +38,11 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 	public static List<Casa> nuoveCostruzioniList = new ArrayList<>();
 //	public static HashMap<Casa, List<Casa>> duplicatiMap = new HashMap<Casa, List<Casa>>();
 	
-	private void detailsAnalize_WIP() throws IOException {
+	public static void main(String[] args) throws IOException {
+		detailsAnalize_WIP();
+	}
+	
+	private static void detailsAnalize_WIP() throws IOException {
 		Document doc = Jsoup.connect(ImmobiliareIt.getDetailsImmobilareItUrl("77791598")).get();
 
 		Element element = doc.getElementById("js-hydration");
@@ -46,9 +51,18 @@ public class AnalyzeServiceImpl implements AnalyzeService {
 		infoJson = infoJson.replace("<script type=\"application/json\" id=\"js-hydration\">", "").replace("</script>", "");
 
 
-		System.out.println(infoJson);
-
-		System.out.println(JsonPath.parse(infoJson).read("$.multimedia.immagini.list").toString());
+//		System.out.println(infoJson);
+		
+//		System.out.println(JsonPath.parse(infoJson).read("$.multimedia.planimetrie.list.srcSet.large").toString());
+		DocumentContext documentContext = JsonPath.parse(infoJson);
+		List<String> plans = documentContext.read("$.multimedia.planimetrie.list.[*].srcSet.large");
+		List<String> images = documentContext.read("$.multimedia.immagini.list.[*].srcSet.large");
+		
+		System.out.println(plans);
+		System.out.println(images);
+		
+//		JsonPath.read("$.multimedia.planimetrie.list.srcSet.large", infoJson, JsonNode.class);
+//		System.out.println(JsonPath.parse(infoJson).read("$.multimedia.immagini.list.srcSet.large").toString());
 		
 		/*
 		 *String jsonString = "{\"delivery_codes\": [{\"postal_code\": {\"district\": \"Ghaziabad\", \"pin\": 201001, \"pre_paid\": \"Y\", \"cash\": \"Y\", \"pickup\": \"Y\", \"repl\": \"N\", \"cod\": \"Y\", \"is_oda\": \"N\", \"sort_code\": \"GB\", \"state_code\": \"UP\"}}]}";

@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Deprecated
 @Entity
 @Table(name = "selected_house")
 public class SelectedHouse {

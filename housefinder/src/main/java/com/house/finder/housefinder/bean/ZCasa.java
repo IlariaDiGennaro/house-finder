@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Deprecated
 @Entity
 @Table(name = "z_casa")
 public class ZCasa implements Serializable{

@@ -2,40 +2,63 @@ package com.house.finder.housefinder.bean;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "house")
 public class House {
 
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "ad_id", nullable = false)
 	private String adId;
+	@Column(name = "title", nullable = false)
 	private String title;
+	@Column(name = "link", nullable = false)
 	private String link;
+	@Column(name = "description", nullable = false)
 	private String description;
+	@Column(name = "price", nullable = false)
 	private String price;
+	@Column(name = "rooms", nullable = false)
 	private String rooms;
+	@Column(name = "mq", nullable = false)
 	private String mq;
+	@Column(name = "wcs")
 	private String wcs;
+	@Column(name = "floor")
 	private String floor;
+	@Column(name = "agency")
 	private String agency;
+	@Column(name = "phone_numbers_agency", nullable = false)
 	private String phoneNumbersAgency;
+	@Column(name = "ad_rif", nullable = false)
 	private String adRif;
+	@Column(name = "ad_date", nullable = false)
 	private String adDate;
-	private List<HouseImage> houseImages;
+	@Column(name = "note")
 	private String note;
-	private String resubCounter;
+	@Column(name = "resub_counter", nullable = false)
+	private Integer resubCounter;
+	@Column(name = "house_status", nullable = false)
 	@Enumerated(EnumType.STRING)
     private HouseStatus houseStatus;
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy = "house")
+	private List<HouseImage> houseImages;
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy = "house")
 	private List<HouseHistory> houseHistories;
 	
-	public List<HouseHistory> getHouseHistories() {
-		return houseHistories;
-	}
-	public void setHouseHistories(List<HouseHistory> houseHistories) {
-		this.houseHistories = houseHistories;
-	}
 	public Integer getId() {
 		return id;
 	}
@@ -132,10 +155,10 @@ public class House {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	public String getResubCounter() {
+	public Integer getResubCounter() {
 		return resubCounter;
 	}
-	public void setResubCounter(String resubCounter) {
+	public void setResubCounter(Integer resubCounter) {
 		this.resubCounter = resubCounter;
 	}
 	public HouseStatus getHouseStatus() {
@@ -143,6 +166,12 @@ public class House {
 	}
 	public void setHouseStatus(HouseStatus houseStatus) {
 		this.houseStatus = houseStatus;
+	}
+	public List<HouseHistory> getHouseHistories() {
+		return houseHistories;
+	}
+	public void setHouseHistories(List<HouseHistory> houseHistories) {
+		this.houseHistories = houseHistories;
 	}
 	
 	@Override
@@ -177,7 +206,7 @@ public class House {
 		builder.append(", adDate=");
 		builder.append(adDate);
 		builder.append(", houseImages=");
-		builder.append(houseImages);
+		builder.append(houseImages.toString());
 		builder.append(", note=");
 		builder.append(note);
 		builder.append(", resubCounter=");

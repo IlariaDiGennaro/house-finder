@@ -1,24 +1,55 @@
 package com.house.finder.housefinder.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class HouseTmp {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "house_tmp")
+public class HouseTmp implements Serializable{
+
+	private static final long serialVersionUID = -4151977324446814902L;
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "ad_id", nullable = false)
 	private String adId;
+	@Column(name = "title", nullable = false)
 	private String title;
+	@Column(name = "link", nullable = false)
 	private String link;
+	@Column(name = "description", nullable = false)
 	private String description;
+	@Column(name = "price", nullable = false)
 	private String price;
+	@Column(name = "rooms", nullable = false)
 	private String rooms;
+	@Column(name = "mq", nullable = false)
 	private String mq;
+	@Column(name = "wcs")
 	private String wcs;
+	@Column(name = "floor")
 	private String floor;
+	@Column(name = "agency")
 	private String agency;
+	@Column(name = "phone_numbers_agency", nullable = false)
 	private String phoneNumbersAgency;
+	@Column(name = "ad_rif", nullable = false)
 	private String adRif;
+	@Column(name = "ad_date", nullable = false)
 	private String adDate;
-	private List<HouseImage> houseImages;
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy = "houseTmp")
+	private List<HouseTmpImage> houseTmpImages;
 	
 	public Integer getId() {
 		return id;
@@ -104,48 +135,11 @@ public class HouseTmp {
 	public void setAdDate(String adDate) {
 		this.adDate = adDate;
 	}
-	public List<HouseImage> getHouseImages() {
-		return houseImages;
+	public List<HouseTmpImage> getHouseTmpImages() {
+		return houseTmpImages;
 	}
-	public void setHouseImages(List<HouseImage> houseImages) {
-		this.houseImages = houseImages;
+	public void setHouseTmpImages(List<HouseTmpImage> houseTmpImages) {
+		this.houseTmpImages = houseTmpImages;
 	}
-	
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("HouseTmp [id=");
-		builder.append(id);
-		builder.append(", adId=");
-		builder.append(adId);
-		builder.append(", title=");
-		builder.append(title);
-		builder.append(", link=");
-		builder.append(link);
-		builder.append(", description=");
-		builder.append(description);
-		builder.append(", price=");
-		builder.append(price);
-		builder.append(", rooms=");
-		builder.append(rooms);
-		builder.append(", mq=");
-		builder.append(mq);
-		builder.append(", wcs=");
-		builder.append(wcs);
-		builder.append(", floor=");
-		builder.append(floor);
-		builder.append(", agency=");
-		builder.append(agency);
-		builder.append(", phoneNumbersAgency=");
-		builder.append(phoneNumbersAgency);
-		builder.append(", adRif=");
-		builder.append(adRif);
-		builder.append(", adDate=");
-		builder.append(adDate);
-		builder.append(", houseImages=");
-		builder.append(houseImages);
-		builder.append("]");
-		return builder.toString();
-	}
-	
+
 }

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import com.house.finder.housefinder.bean.Casa;
 
+@Deprecated
 public class CasaComparator {
 	
 	public static boolean equals(Casa casa1, Casa casa2) {

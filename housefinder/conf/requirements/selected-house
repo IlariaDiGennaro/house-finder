@@ -1,0 +1,31 @@
+REQUISITI:
+Selezionare (selected) una casa (house/ads) presente nella lista delle house-tmp o house
+1- note: l'annuncio è nella house-tmp
+---- deve creare una copia della house-tmp nella house
+---- deve modificare la fk nella tabella house-image associandola alla house;
+---- deve tracciare in nuovo stato della house nella tabella house-history 
+---- deve cancellare la house-tmp;
+2- note: l'annuncio della casa è già presente nella house (+ house-image);
+---- deve creare una riga nella tabella house-history
+---- deve aggiornare lo stato della house ed aggiungere la motivazione
+
+SEQUENZA/PROCESSO:
+1-
+cerca la casa nella tabella house-tmp con l'id (in input)
+        | -> no: vai al punto 2
+copia i dati della house-tmp nella tabella house, mettendo lo stato "selected"
+        | -> no: ritorna errore parlante e rollback
+prende le immagini associate alla house-tmp e ne cambia la fk con il valore id della house
+        | -> no: ritorna errore parlante e rollback
+crea una house-history relativa alla casa (old e new status: NEW -> SELECTED)
+        | -> no: ritorna errore parlante e rollback
+cancella la house-tmp
+        | -> no: ritorna errore parlante e rollback
+
+2-
+cerca la casa nella tabella house con l'id (in input)
+        | -> no: ritorna errore parlante
+crea una house-history relativa alla casa (old e new status: old -> SELECTED)
+        | -> no: ritorna errore parlante e rollback
+aggiorna la tabella house, mettendo lo stato "selected" e la motivazione
+        | -> no: ritorna errore parlante e rollback
