@@ -111,14 +111,14 @@ public class HouseManager {
 		if(oldStatus.equals(newStatus))
 			return false;
 		
-		if(oldStatus.equals(HouseStatus.NEW))
-			return true;
-		else if(oldStatus.equals(HouseStatus.REJECTED) && !newStatus.equals(HouseStatus.NEW))
-			return true;
-		else if(oldStatus.equals(HouseStatus.SELECTED) && !newStatus.equals(HouseStatus.NEW))
-			return true;
+//		if(oldStatus.equals(HouseStatus.NEW))
+//			return true;
+//		else if(oldStatus.equals(HouseStatus.REJECTED))
+//			return true;
+//		else if(oldStatus.equals(HouseStatus.SELECTED) && !newStatus.equals(HouseStatus.NEW))
+//			return true;
 			
-		return false;
+		return true;
 	}
 	
 	private House buildHouse(HouseTmp houseTmp) {

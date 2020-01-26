@@ -31,6 +31,8 @@ public class House {
 	private String description;
 	@Column(name = "price", nullable = false)
 	private String price;
+	@Column(name = "price_history")
+	private String priceHistory;
 	@Column(name = "rooms", nullable = false)
 	private String rooms;
 	@Column(name = "mq", nullable = false)
@@ -94,6 +96,12 @@ public class House {
 	}
 	public void setPrice(String price) {
 		this.price = price;
+	}
+	public String getPriceHistory() {
+		return priceHistory;
+	}
+	public void setPriceHistory(String priceHistory) {
+		this.priceHistory = priceHistory;
 	}
 	public String getRooms() {
 		return rooms;
@@ -189,6 +197,8 @@ public class House {
 		builder.append(description);
 		builder.append(", price=");
 		builder.append(price);
+		builder.append(", priceHistory=");
+		builder.append(priceHistory);
 		builder.append(", rooms=");
 		builder.append(rooms);
 		builder.append(", mq=");

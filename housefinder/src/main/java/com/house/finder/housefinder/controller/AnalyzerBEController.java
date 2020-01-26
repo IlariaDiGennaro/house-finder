@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.house.finder.housefinder.service.AdsAnalyzer;
+import com.house.finder.housefinder.analyzer.AdsAnalyzer;
 
 @Controller
 public class AnalyzerBEController {

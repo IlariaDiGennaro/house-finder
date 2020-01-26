@@ -23,6 +23,7 @@ CREATE TABLE `house` (
 	`link` varchar(255) NOT NULL,
 	`description` varchar(5000) NOT NULL,
 	`price` varchar(20) NOT NULL,
+	`price_history` varchar(255) NULL,
 	`rooms` varchar(20) NOT NULL,
 	`mq` varchar(20) NOT NULL,
 	`wcs` varchar(20),
@@ -33,7 +34,7 @@ CREATE TABLE `house` (
 	`ad_date` varchar(20) NOT NULL,
 	`note` varchar(5000),
 	`resub_counter` INT NOT NULL DEFAULT '0',
-	`house_status` enum('SELECTED','REJECTED','DELETED') NOT NULL,
+	`house_status` enum('SELECTED','REJECTED','DELETED','DISCOUNTED','REPUBLISHED') NOT NULL,
 	primary key (id)
 );
 
@@ -49,8 +50,8 @@ CREATE TABLE `house_image` (
 CREATE TABLE `house_history` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`house_id` INT NOT NULL,
-	`house_status_old` enum('NEW','SELECTED','REJECTED','DELETED') NOT NULL,
-	`house_status_new` enum('SELECTED','REJECTED','DELETED') NOT NULL,
+	`house_status_old` enum('NEW','SELECTED','REJECTED','DELETED','DISCOUNTED','REPUBLISHED') NOT NULL,
+	`house_status_new` enum('SELECTED','REJECTED','DELETED','DISCOUNTED','REPUBLISHED') NOT NULL,
 	`change_datetime` DATETIME NOT NULL,
 	primary key (id)
 );

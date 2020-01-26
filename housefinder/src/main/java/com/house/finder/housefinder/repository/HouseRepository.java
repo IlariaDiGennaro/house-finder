@@ -17,8 +17,8 @@ public interface HouseRepository extends JpaRepository<House, Integer> {
 	
 	public House findFirstByHouseStatusAndAdId(HouseStatus houseStatus, String adId);
 	
-	@Query("SELECT adId FROM House h WHERE h.houseStatus = :houseStatus")
-	public List<String> findAdIdsByHouseStatus(@Param("houseStatus") HouseStatus houseStatus);
+//	@Query("SELECT adId FROM House h WHERE h.houseStatus = :houseStatus")
+//	public List<String> findAdIdsByHouseStatus(@Param("houseStatus") HouseStatus houseStatus);
 
 	public List<House> findByHouseStatus(HouseStatus houseStatus);
 	
@@ -26,5 +26,7 @@ public interface HouseRepository extends JpaRepository<House, Integer> {
 	public List<House> findByHouseStatusNotDeletd(@Param("houseStatus") HouseStatus houseStatus);
 
 	public House findByAdId(String adId);
+	
+	public List<House> findByAdIdNotIn(List<String> adIds);
 	
 }

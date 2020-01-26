@@ -24,6 +24,7 @@ import com.house.finder.housefinder.site.bean.ImmobiliareIt;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
+@Deprecated
 @Service
 public class AnalyzeServiceImpl implements AnalyzeService {
 	

@@ -30,7 +30,7 @@ import com.house.finder.housefinder.site.bean.ImmobiliareIt;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-@Service
+//@Service
 public class AdsAnalyzer {
 
 	@Autowired
@@ -47,12 +47,32 @@ public class AdsAnalyzer {
 
 	public static List<HouseTmp> houseTmpList_toBeEvaluated;
 
+	private House checkChangedPrice(List<House> houseRejectedList, HouseTmp houseTmp_toBeEvaluated) {
+		for (House house : houseRejectedList) {
 
+			if(house.getAdId().equalsIgnoreCase(houseTmp_toBeEvaluated.getAdId()) &&
+					!house.getPrice().equalsIgnoreCase(houseTmp_toBeEvaluated.getPrice()) ) {
+				return house;
+			}
+		}
+		return null;
+	}
+
+	private boolean checkAlreadyRejected(List<House> houseRejectedList, HouseTmp houseTmp_toBeEvaluated) {
+		for (House house : houseRejectedList) {
+
+			if(house.getAdId().equalsIgnoreCase(houseTmp_toBeEvaluated.getAdId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Transactional
 	public void adsAnalyzer() throws IOException {
-		
+
 		houseTmpList_toBeEvaluated = new ArrayList<>();
-		List<String> houseIdsRejected = houseRepository.findAdIdsByHouseStatus(HouseStatus.REJECTED);
+		List<House> houseRejectedList = houseRepository.findByHouseStatus(HouseStatus.REJECTED);
 
 		Integer maxPage = 9999;
 		String immobiliareItUrl = ImmobiliareIt.getImmobilareItUrl();
@@ -62,7 +82,7 @@ public class AdsAnalyzer {
 			Document adsListHtmlPage = null;
 			if(pageNum == 1) {
 				adsListHtmlPage = Jsoup.connect(immobiliareItUrl).get();
-				maxPage = getLastPageNumber(adsListHtmlPage);
+//				maxPage = getLastPageNumber(adsListHtmlPage);
 				System.out.println("Numero di pagine: " + maxPage);
 			} else {
 				String page = String.valueOf(pageNum);
@@ -73,80 +93,101 @@ public class AdsAnalyzer {
 			Elements adsIdLIst = adsListHtmlPage.select("p.titolo.text-primary");
 			for (Element adsIdElem : adsIdLIst) {
 
-				String adLink = getAdLink(adsIdElem);
-				String adId = getAdId(adLink);
-			
-				if(!houseIdsRejected.contains(adId) && !adId.startsWith("p-")) {
+				String adLink = null;//getAdLink(adsIdElem);
+				String adId = null;//getAdId(adLink);
+
+				if(!adId.startsWith("p-")) {
 
 					HouseTmp houseTmp_toBeEvaluated = buildHouseTmp(adLink, adId);
-					
-					House houseSelected = houseRepository.findFirstByHouseStatusAndAdId(HouseStatus.SELECTED, adId);
-					HouseTmp houseTmp = houseTmpRepository.findFirstByAdId(adId);
-					
-					if(houseTmp != null || houseSelected != null) {
-						if(houseTmp != null) {
-							System.out.println("update house tmp: "+houseTmp.getAdId());
-							updateHouseTmp(houseTmp_toBeEvaluated, houseTmp);
-						} else if(houseSelected != null) {
-							System.out.println("update house selected: "+houseSelected.getAdId());
-							updateHouseSelected(houseTmp_toBeEvaluated, houseSelected);
-						}
-					} else {
+					House housePreviuslyRejected = checkChangedPrice(houseRejectedList, houseTmp_toBeEvaluated);
+					if(housePreviuslyRejected != null) {
+
+						System.out.println("DIFFERENT HOUSE PRICE (BEFORE WAS REJECTED)");
 						
-						System.out.println("NEW HOUSE ads!!!");
+						List<HouseHistory> houseHistoryListPreviuslyRejected = housePreviuslyRejected.getHouseHistories();
+						int size = houseHistoryListPreviuslyRejected.size();
 						
-						House houseOriginalResub = checkAdResubmission(houseTmp_toBeEvaluated);
-						if( houseOriginalResub != null ) {
-	
-							List<HouseHistory> oldHistory = houseOriginalResub.getHouseHistories();
-							List<HouseImage> oldImage = houseOriginalResub.getHouseImages();
-							
-							HouseHistory houseHistory = new HouseHistory();
-							houseHistory.setHouse(houseOriginalResub);
-							houseHistory.setOldStatus(houseOriginalResub.getHouseStatus());
-							houseHistory.setNewStatus(HouseStatus.DELETED);
-							houseHistory.setChangeDatetime(new Date());
-							houseHistoryRepository.save(houseHistory);
-	
-							houseOriginalResub.setHouseStatus(HouseStatus.DELETED);
-							String resubNote = houseOriginalResub.getNote();
-							resubNote.concat(" RESUB: ").concat(houseOriginalResub.getAdId());
-							
-							int originalResubCounter = houseOriginalResub.getResubCounter();
-							House houseResub = buildHouse(houseTmp_toBeEvaluated, houseOriginalResub);
-							houseResub.setResubCounter(originalResubCounter++);
-							houseResub.setAdDate(houseOriginalResub.getAdDate());
-							houseResub.setNote(resubNote);
-							
-							for (HouseHistory oldhouseHistory : oldHistory) {
-								oldhouseHistory.setHouse(houseResub);
+						HouseHistory houseHistory = new HouseHistory();
+						houseHistory.setHouse(housePreviuslyRejected);
+						houseHistory.setOldStatus(houseHistoryListPreviuslyRejected.get(size-1).getNewStatus());
+						houseHistory.setNewStatus(HouseStatus.NEW);
+						houseHistory.setChangeDatetime(new Date());
+						houseHistoryRepository.save(houseHistory);
+						
+						houseTmp_toBeEvaluated.setHouseTmpImages(null);
+						
+						houseTmpRepository.save(houseTmp_toBeEvaluated);
+												
+					} else if (!checkAlreadyRejected(houseRejectedList, houseTmp_toBeEvaluated)) {
+
+						House houseSelected = houseRepository.findFirstByHouseStatusAndAdId(HouseStatus.SELECTED, adId);
+						HouseTmp houseTmp = houseTmpRepository.findFirstByAdId(adId);
+
+						if(houseTmp != null || houseSelected != null) {
+							if(houseTmp != null) {
+								System.out.println("update house tmp: "+houseTmp.getAdId());
+								updateHouseTmp(houseTmp_toBeEvaluated, houseTmp);
+							} else if(houseSelected != null) {
+								System.out.println("update house selected: "+houseSelected.getAdId());
+								updateHouseSelected(houseTmp_toBeEvaluated, houseSelected);
 							}
-							houseResub.setHouseHistories(oldHistory);
-							
-							for (HouseImage oldHouseImage : oldImage) {
-								oldHouseImage.setHouse(houseResub);
-							}
-							houseResub.setHouseImages(oldImage);
-	
-							houseRepository.saveAndFlush(houseOriginalResub);
-							houseRepository.saveAndFlush(houseResub);
-	
 						} else {
-							houseTmpRepository.save(houseTmp_toBeEvaluated);
+
+							System.out.println("NEW HOUSE ads!!!");
+
+							House houseOriginalResub = checkAdResubmission(houseTmp_toBeEvaluated);
+							if( houseOriginalResub != null ) {
+
+								List<HouseHistory> oldHistory = houseOriginalResub.getHouseHistories();
+								List<HouseImage> oldImage = houseOriginalResub.getHouseImages();
+
+								HouseHistory houseHistory = new HouseHistory();
+								houseHistory.setHouse(houseOriginalResub);
+								houseHistory.setOldStatus(houseOriginalResub.getHouseStatus());
+								houseHistory.setNewStatus(HouseStatus.DELETED);
+								houseHistory.setChangeDatetime(new Date());
+								houseHistoryRepository.save(houseHistory);
+
+								houseOriginalResub.setHouseStatus(HouseStatus.DELETED);
+								String resubNote = houseOriginalResub.getNote();
+								resubNote.concat(" RESUB: ").concat(houseOriginalResub.getAdId());
+
+								int originalResubCounter = houseOriginalResub.getResubCounter();
+								House houseResub = buildHouse(houseTmp_toBeEvaluated, houseOriginalResub);
+								houseResub.setResubCounter(originalResubCounter++);
+								houseResub.setAdDate(houseOriginalResub.getAdDate());
+								houseResub.setNote(resubNote);
+
+								for (HouseHistory oldhouseHistory : oldHistory) {
+									oldhouseHistory.setHouse(houseResub);
+								}
+								houseResub.setHouseHistories(oldHistory);
+
+								for (HouseImage oldHouseImage : oldImage) {
+									oldHouseImage.setHouse(houseResub);
+								}
+								houseResub.setHouseImages(oldImage);
+
+								houseRepository.saveAndFlush(houseOriginalResub);
+								houseRepository.saveAndFlush(houseResub);
+
+							} else {
+								houseTmpRepository.save(houseTmp_toBeEvaluated);
+							}
 						}
 					}
 				} else {
-					System.out.println("L'annuncio riguarda una casa già rigettata od è una nuova costruzione");
+					//					System.out.println("L'annuncio riguarda una casa già rigettata od è una nuova costruzione");
 				}
 			}
 		}
-		
+
 		List<House> houseSelectedList = houseRepository.findByHouseStatus(HouseStatus.SELECTED);
 
 		for (House house : houseSelectedList) {
 			checkAdAvailability(house);
 		}
-		
+
 		//check availability tmp
 	}
 
@@ -177,9 +218,9 @@ public class AdsAnalyzer {
 			if(houseTmp_toBeEvaluated.getTitle().trim().equals(houseSelected.getTitle().trim())) {
 				equalsCounter++;
 			}
-//			if(houseTmp_toBeEvaluated.getDescription().trim().equals(houseSelected.getDescription().trim())) {
-//				equalsCounter++;
-//			}
+			//			if(houseTmp_toBeEvaluated.getDescription().trim().equals(houseSelected.getDescription().trim())) {
+			//				equalsCounter++;
+			//			}
 			if(houseTmp_toBeEvaluated.getPrice().trim().equals(houseSelected.getPrice().trim())) {
 				equalsCounter++;
 			}
@@ -192,12 +233,12 @@ public class AdsAnalyzer {
 			if(houseTmp_toBeEvaluated.getWcs().trim().equals(houseSelected.getWcs().trim())) {
 				equalsCounter++;
 			}
-//			if(houseTmp_toBeEvaluated.getFloor().trim().equals(houseSelected.getFloor().trim())) {
-//				equalsCounter++;
-//			}
-//			if(houseTmp_toBeEvaluated.getAgency().trim().equals(houseSelected.getAgency().trim())) {
-//				equalsCounter++;
-//			}
+			//			if(houseTmp_toBeEvaluated.getFloor().trim().equals(houseSelected.getFloor().trim())) {
+			//				equalsCounter++;
+			//			}
+			//			if(houseTmp_toBeEvaluated.getAgency().trim().equals(houseSelected.getAgency().trim())) {
+			//				equalsCounter++;
+			//			}
 			if(houseTmp_toBeEvaluated.getAdRif().trim().equals(houseSelected.getAdRif().trim())) {
 				equalsCounter++;
 			}
@@ -206,13 +247,13 @@ public class AdsAnalyzer {
 				System.out.println("\n\nANNUNCIO SOSPETTO");
 				System.out.println("houseTmp_tBE\t\thouseSelected");
 				System.out.println(houseTmp_toBeEvaluated.getTitle()+"\t\t"+houseSelected.getTitle());
-//				System.out.println(houseTmp_toBeEvaluated.getDescription()+"\t\t"+houseSelected.getDescription());
+				//				System.out.println(houseTmp_toBeEvaluated.getDescription()+"\t\t"+houseSelected.getDescription());
 				System.out.println(houseTmp_toBeEvaluated.getPrice()+"\t\t"+houseSelected.getPrice());
 				System.out.println(houseTmp_toBeEvaluated.getRooms()+"\t\t"+houseSelected.getRooms());
 				System.out.println(houseTmp_toBeEvaluated.getMq()+"\t\t"+houseSelected.getMq());
 				System.out.println(houseTmp_toBeEvaluated.getWcs()+"\t\t"+houseSelected.getWcs());
-//				System.out.println(houseTmp_toBeEvaluated.getFloor()+"\t\t"+houseSelected.getFloor());
-//				System.out.println(houseTmp_toBeEvaluated.getAgency()+"\t\t"+houseSelected.getAgency());
+				//				System.out.println(houseTmp_toBeEvaluated.getFloor()+"\t\t"+houseSelected.getFloor());
+				//				System.out.println(houseTmp_toBeEvaluated.getAgency()+"\t\t"+houseSelected.getAgency());
 				System.out.println(houseTmp_toBeEvaluated.getAdRif()+"\t\t"+houseSelected.getAdRif());
 
 				try {
@@ -229,7 +270,7 @@ public class AdsAnalyzer {
 		}
 		return null;
 	}
-	
+
 	private House buildHouse(HouseTmp houseTmp_toBeEvaluated, House houseSelected) {
 
 		houseSelected.setAdId(houseTmp_toBeEvaluated.getAdId());
@@ -249,17 +290,17 @@ public class AdsAnalyzer {
 	}
 
 	private void updateHouseTmp(HouseTmp houseTmp_toBeEvaluated, HouseTmp houseTmp) {
-		
+
 		List<HouseTmpImage> houseTmpImageList = houseTmp_toBeEvaluated.getHouseTmpImages();
 		for (HouseTmpImage houseTmpImage : houseTmpImageList) {
-//			System.out.println(houseTmpImage.getUrl());
+			//			System.out.println(houseTmpImage.getUrl());
 			List<HouseTmpImage> houseImageFoundList = houseTmpImageRepository.findByUrlAndHouseTmp(houseTmpImage.getUrl(), houseTmp);
 			if(houseImageFoundList == null || houseImageFoundList.isEmpty() )  {
 				houseTmpImage.setHouseTmp(houseTmp);
 				houseTmpImageRepository.save(houseTmpImage);
 			}
 		}
-		
+
 		houseTmp.setAdId(houseTmp_toBeEvaluated.getAdId());
 		houseTmp.setTitle(houseTmp_toBeEvaluated.getTitle());
 		houseTmp.setLink(houseTmp_toBeEvaluated.getLink());
@@ -272,13 +313,13 @@ public class AdsAnalyzer {
 		houseTmp.setAgency(houseTmp_toBeEvaluated.getAgency());
 		houseTmp.setPhoneNumbersAgency(houseTmp_toBeEvaluated.getPhoneNumbersAgency());
 		houseTmp.setAdRif(houseTmp_toBeEvaluated.getAdRif());
-//		houseTmp.setAdDate(houseTmp_toBeEvaluated.getAdDate());
-//		houseTmp.setHouseImages(houseTmp_toBeEvaluated.getHouseImages());
+		//		houseTmp.setAdDate(houseTmp_toBeEvaluated.getAdDate());
+		//		houseTmp.setHouseImages(houseTmp_toBeEvaluated.getHouseImages());
 		houseTmpRepository.save(houseTmp);
 	}
 
 	private void updateHouseSelected(HouseTmp houseTmp_toBeEvaluated, House houseSelected) {
-		
+
 		List<HouseTmpImage> houseTmpImageList = houseTmp_toBeEvaluated.getHouseTmpImages();
 		for (HouseTmpImage houseTmpImage : houseTmpImageList) {
 			HouseImage houseImageFound = houseImageRepository.findByUrl(houseTmpImage.getUrl());
@@ -303,8 +344,8 @@ public class AdsAnalyzer {
 		houseSelected.setAgency(houseTmp_toBeEvaluated.getAgency());
 		houseSelected.setPhoneNumbersAgency(houseTmp_toBeEvaluated.getPhoneNumbersAgency());
 		houseSelected.setAdRif(houseTmp_toBeEvaluated.getAdRif());
-//		houseSelected.setAdDate(houseTmp_toBeEvaluated.getAdDate());
-//		houseSelected.setHouseImages(houseTmp_toBeEvaluated.getHouseImages());
+		//		houseSelected.setAdDate(houseTmp_toBeEvaluated.getAdDate());
+		//		houseSelected.setHouseImages(houseTmp_toBeEvaluated.getHouseImages());
 		houseRepository.save(houseSelected);
 	}
 
@@ -313,7 +354,7 @@ public class AdsAnalyzer {
 		HouseTmp houseTmp = new HouseTmp();
 		houseTmp.setAdId(adId);
 		houseTmp.setLink(adLink);
-//		System.out.println(adLink);
+		//		System.out.println(adLink);
 
 		// oppure direttamente 'adLink'
 		Document adHtmlPage = Jsoup.connect(ImmobiliareIt.getDetailsImmobilareItUrl(adId)).get();
@@ -442,21 +483,21 @@ public class AdsAnalyzer {
 		return houseTmp;
 	}
 
-	private Integer getLastPageNumber(Document adsListHtmlPage) {
-		Elements ul = adsListHtmlPage.select("ul.pagination__number");
-		return Integer.valueOf(ul.select("li").last().text());
-	}
+//	private Integer getLastPageNumber(Document adsListHtmlPage) {
+//		Elements ul = adsListHtmlPage.select("ul.pagination__number");
+//		return Integer.valueOf(ul.select("li").last().text());
+//	}
 
-	private String getAdLink(Element adsId) {
-		Element href = adsId.select("a[href]").first();
-		return href.attr("href");
-	}
-
-	private String getAdId(String adLink) {
-		String[] adUrl = adLink.split("/");
-		int adUrlLength = adUrl.length;
-		return adUrl[adUrlLength-1];
-	}
+//	private String getAdLink(Element adsId) {
+//		Element href = adsId.select("a[href]").first();
+//		return href.attr("href");
+//	}
+//
+//	private String getAdId(String adLink) {
+//		String[] adUrl = adLink.split("/");
+//		int adUrlLength = adUrl.length;
+//		return adUrl[adUrlLength-1];
+//	}
 
 	/*
 	private String getAdId(Element adsId) {

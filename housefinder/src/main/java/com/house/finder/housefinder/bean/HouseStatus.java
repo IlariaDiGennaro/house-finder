@@ -4,5 +4,7 @@ public enum HouseStatus {
 	NEW,
 	SELECTED,
 	REJECTED,
-	DELETED
+	DELETED,
+	DISCOUNTED,
+	REPUBLISHED
 }
