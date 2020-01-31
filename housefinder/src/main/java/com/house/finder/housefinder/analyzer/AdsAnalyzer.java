@@ -144,7 +144,7 @@ public class AdsAnalyzer {
 			
 			} else {
 				// CREA TUTTO L'AMBARADAM
-				System.out.println("nuovo annuncio! "+houseTmp.getTitle()+" "+houseTmp.getMq()+" "+houseTmp.getFloor());
+				System.out.println("> NUOVO ANNUNCIO ! "+houseTmp.getTitle()+" "+houseTmp.getPrice()+" "+houseTmp.getMq()+" "+houseTmp.getFloor());
 				houseTmpRepository.save(houseTmp);
 			}
 //			System.out.println("NO OPTION EVALUATED FOR THIS AD: "+ houseFromDb.getAdId() +" "+houseFromDb.getTitle());
