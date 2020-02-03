@@ -71,7 +71,7 @@ public class AdsAnalyzer {
 					//				 --> update
 					
 					if(!houseTmpPrice.equalsIgnoreCase(houseFromDbPrice)) {
-						System.out.println("DIFFERENT PRICE - HOUSE SELECTED "+ houseFromDb.getAdId() +" "+houseFromDb.getTitle()+" | before:" + houseFromDbPrice + " after: " + houseTmpPrice);
+						System.out.println("> DIFFERENT PRICE - HOUSE SELECTED "+ houseFromDb.getAdId() +" "+houseFromDb.getTitle()+" | before:" + houseFromDbPrice + " after: " + houseTmpPrice);
 						
 						saveHouseHistory(houseFromDb, HouseStatus.DISCOUNTED);
 
@@ -93,7 +93,7 @@ public class AdsAnalyzer {
 					// se è REJECTED --> controllare il prezzo --> se cambiato va aggiornato lo stato "discounted" --> update
 					
 					if(!houseTmpPrice.equalsIgnoreCase(houseFromDbPrice)) {
-						System.out.println("DIFFERENT PRICE - HOUSE REJECTED  "+ houseFromDb.getAdId() +" "+houseFromDb.getTitle()+" | before:" + houseFromDbPrice + " after: " + houseTmpPrice);
+						System.out.println("> DIFFERENT PRICE - HOUSE REJECTED  "+ houseFromDb.getAdId() +" "+houseFromDb.getTitle()+" | before:" + houseFromDbPrice + " after: " + houseTmpPrice);
 						
 						saveHouseHistory(houseFromDb, HouseStatus.DISCOUNTED);
 
@@ -110,7 +110,7 @@ public class AdsAnalyzer {
 				if(houseFromDb.getHouseStatus().equals(HouseStatus.DELETED)) {
 					// se è deleted --> va aggiornato lo stato e messo in "republished"
 					
-					System.out.println("REPUBLISHED HOUSE - "+ houseFromDb.getAdId() +" "+houseFromDb.getTitle());
+					System.out.println("> REPUBLISHED HOUSE - "+ houseFromDb.getAdId() +" "+houseFromDb.getTitle());
 					
 					saveHouseHistory(houseFromDb, HouseStatus.REPUBLISHED);
 
