@@ -12,7 +12,7 @@ public class ImmobiliareIt {
 	private static String noAste = "&noAste=1";
 	private static String localiMin = "&localiMinimo=3";
 	private static String tipoProp = "&tipoProprieta=1";
-	private static String fasciaPiano = "&fasciaPiano[]=20";
+	//private static String fasciaPiano = "&fasciaPiano[]=20";
 	
 	
 	public static String getImmobilareItUrl(){
@@ -22,7 +22,8 @@ public class ImmobiliareIt {
 				.concat(noAste)
 				.concat(localiMin)
 				.concat(tipoProp)
-				.concat(fasciaPiano);
+//				.concat(fasciaPiano)
+		;
 	}
 	
 	private static String basicDetailsImmobiliareItUrl = "https://www.immobiliare.it/annunci/";

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.house.finder.housefinder.analyzer.util.AdsAnalyzerUtils;
+import com.house.finder.housefinder.analyzer.util.ImmobiliareItAdsAnalyzerUtils;
 import com.house.finder.housefinder.bean.House;
 import com.house.finder.housefinder.bean.HouseHistory;
 import com.house.finder.housefinder.bean.HouseImage;
@@ -23,7 +23,7 @@ import com.house.finder.housefinder.repository.HouseTmpImageRepository;
 import com.house.finder.housefinder.repository.HouseTmpRepository;
 
 @Service
-public class AdsAnalyzer {
+public class ImmobiliareItAdsAnalyzer {
 	
 	@Autowired
 	public HouseRepository houseRepository;
@@ -49,7 +49,7 @@ public class AdsAnalyzer {
 	public void adsAnalyzer() throws IOException {
 		
 		houseFromSite_toBeEvaluated = new ArrayList<>();
-		houseFromSite_toBeEvaluated = AdsAnalyzerUtils.buildHouseTmpList();
+		houseFromSite_toBeEvaluated = ImmobiliareItAdsAnalyzerUtils.buildHouseTmpList();
 		System.out.println("Analisi IMMOBILIARE.IT finita");
 		
 		List<String> adIdsEvaluated = new ArrayList<>();
@@ -158,7 +158,7 @@ public class AdsAnalyzer {
 			for (House house : houseNotEvaluatedList) {
 				House houseDeleted = houseRepository.findFirstByHouseStatusAndAdId(HouseStatus.DELETED, house.getAdId());
 				if(houseDeleted == null) {
-					AdsAnalyzerUtils.checkAdAvailability(house, houseRepository, houseHistoryRepository);
+					ImmobiliareItAdsAnalyzerUtils.checkAdAvailability(house, houseRepository, houseHistoryRepository);
 				}
 			}
 		}

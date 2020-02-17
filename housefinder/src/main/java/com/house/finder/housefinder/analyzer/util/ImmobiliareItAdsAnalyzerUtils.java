@@ -23,7 +23,7 @@ import com.house.finder.housefinder.site.bean.ImmobiliareIt;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-public class AdsAnalyzerUtils {
+public class ImmobiliareItAdsAnalyzerUtils {
 
 	public static List<HouseTmp> buildHouseTmpList() throws IOException {
 		
@@ -45,8 +45,8 @@ public class AdsAnalyzerUtils {
 			}
 			System.out.println("Analisi pagina: " + pageNum);
 
-			Elements adsIdLIst = adsListHtmlPage.select("p.titolo.text-primary");
-			for (Element adsIdElem : adsIdLIst) {
+			Elements adsIdList = adsListHtmlPage.select("p.titolo.text-primary");
+			for (Element adsIdElem : adsIdList) {
 				
 				HouseTmp houseTmp = new HouseTmp();
 				

@@ -141,5 +141,42 @@ public class HouseTmp implements Serializable{
 	public void setHouseTmpImages(List<HouseTmpImage> houseTmpImages) {
 		this.houseTmpImages = houseTmpImages;
 	}
-
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("HouseTmp [id=");
+		builder.append(id);
+		builder.append(", adId=");
+		builder.append(adId);
+		builder.append(", title=");
+		builder.append(title);
+		builder.append(", link=");
+		builder.append(link);
+		builder.append(", description=");
+		builder.append(description);
+		builder.append(", price=");
+		builder.append(price);
+		builder.append(", rooms=");
+		builder.append(rooms);
+		builder.append(", mq=");
+		builder.append(mq);
+		builder.append(", wcs=");
+		builder.append(wcs);
+		builder.append(", floor=");
+		builder.append(floor);
+		builder.append(", agency=");
+		builder.append(agency);
+		builder.append(", phoneNumbersAgency=");
+		builder.append(phoneNumbersAgency);
+		builder.append(", adRif=");
+		builder.append(adRif);
+		builder.append(", adDate=");
+		builder.append(adDate);
+		builder.append(", houseTmpImages=");
+		builder.append(houseTmpImages);
+		builder.append("]");
+		return builder.toString();
+	}
+	
 }
